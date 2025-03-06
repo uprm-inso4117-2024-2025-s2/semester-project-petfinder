@@ -5,7 +5,7 @@ console.log("🟢 Running Supabase connection test...");
 async function testConnection() {
   console.log("🔍 Querying the database...");
   
-  const { data, error } = await supabase.from('test_table').select('*');
+  const { data, error } = await supabase.from('pets').select('*');
 
   if (error) {
     console.error('❌ Error fetching data:', error);
