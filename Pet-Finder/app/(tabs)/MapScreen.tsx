@@ -1,8 +1,10 @@
 import { Text, View, Platform, Image, TouchableOpacity, TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import MapView, {Marker} from 'react-native-maps';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SearchBar } from "react-native-screens";
+
+
 
 const INITIAL_REGION = {
 	latitude: 18.209533, 
@@ -11,17 +13,68 @@ const INITIAL_REGION = {
 	longitudeDelta: 0.02421
 };
 
+interface Pet {
+  id: number;
+  name: string;
+  type: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
+
 
 
 export default function Map() {
-    const [selectedFilter, setSelectedFilter] = useState('All');
-    const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [data, setData] = useState([] as Pet[]);
 
-    const handleFilterPress = (filter: string) => {
+  useEffect(() => {
+    // Placeholder functionality: Fetch data from API
+    // Placeholder functionality: Set data to state
+
+    console.log(`Selected UseEffect: ${searchQuery}`);
+    setData([
+      {
+        id: 1,
+        name: "Dog 1",
+        type: "Dog",
+        location: {
+          latitude: 18.209533,
+          longitude: -67.140849,
+        },
+      },
+      {
+        id: 2,
+        name: "Dog 2",
+        type: "Dog",
+        location: {
+          latitude: 18.219533,
+          longitude: -67.140849,
+        },
+      },
+      {
+        id: 3,
+        name: "Dog 3",
+        type: "Cat",
+        location: {
+          latitude: 18.219533,
+          longitude: -67.141849,
+        },
+      },
+    ]);
+  }
+  , [selectedFilter, searchQuery]);
+
+
+
+  const handleFilterPress = (filter: string) => {
+    
     setSelectedFilter(filter);
-    // Placeholder functionality: Log the selected filter
-    console.log(`Selected filter: ${filter}`);
-    };
+    console.log(`Selected Button: ${filter}`);
+  };
 
 
 
@@ -33,8 +86,7 @@ export default function Map() {
           style={styles.searchBar}
           placeholder=" Search..."
           placeholderTextColor="#A9A9AC"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
+          onEndEditing={(text) => setSearchQuery(text.nativeEvent.text)}
         />
       </View>
       <View style={styles.filterContainer}>
@@ -54,24 +106,18 @@ export default function Map() {
 
       <View style={styles.container}>
         <MapView initialRegion={INITIAL_REGION} showsUserLocation={true} style={styles.map}>
-            <Marker
-            coordinate={{ latitude: 18.209533, longitude: -67.140849 }}
-            title={"Marker Title"}
-            description={"Marker Description"}
-            image={require('../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png')}
-            />
-            <Marker
-            coordinate={{ latitude: 18.219533, longitude: -67.140849 }}
-            title={"Marker Title"}
-            description={"Marker Description"}
-            image={require('../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png')}
-            />
-            <Marker
-            coordinate={{ latitude: 18.219533, longitude: -67.141849 }}
-            title={"Marker Title"}
-            description={"Marker Description"}
-            image={require('../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png')}
-            />
+            {data.map((pet) => {
+                return (
+                <Marker
+                    key={pet.id}
+                    coordinate={pet.location}
+                    title={pet.name}
+                    description={pet.type}
+                    image={(pet.type === 'Dog') ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+                />
+                );
+            })}
+
         </MapView>
       </View>
     </View>
