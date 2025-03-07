@@ -5,19 +5,26 @@ import { StyleSheet } from 'react-native';
 
 
 const LandingPage = ({ navigation }) => {
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        navigation.replace("Login");
-    };
 
     return (
+
+        <ParallaxScrollView
+              headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+              headerImage={
+                <Image
+                  // source={require('@/assets/images/partial-react-logo.png')}
+                  source={require('@/assets/images/pet_finder_logo_middle.jpeg')}
+                  style={styles.reactLogo}
+                />
+              }>
+
         <View style={styles.container}>
             <Text style={styles.title}>Welcome to Pet Finder!</Text>
             <Text style={styles.subtitle}>Find your perfect pet easily</Text>
             
             {/* Login Button */}
             <TouchableOpacity
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => navigation.navigate("LoginScreen")}
                 style={styles.button}
             >
                 <Text style={styles.buttonText}>Log In</Text>
@@ -39,6 +46,7 @@ const LandingPage = ({ navigation }) => {
                 <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
         </View>
+        </ParallaxScrollView>
     );
 };
 
@@ -47,7 +55,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f4f4f4",
+        backgroundColor: "#6b431f",
         padding: 20,
     },
     title: {
@@ -61,7 +69,7 @@ const styles = StyleSheet.create({
         color: "#777",
     },
     button: {
-        backgroundColor: "#4CAF50",
+        backgroundColor: "#6b431f",
         padding: 15,
         borderRadius: 5,
         width: "80%",
@@ -74,9 +82,6 @@ const styles = StyleSheet.create({
     },
     signUpButton: {
         backgroundColor: "#2196F3", // Different color for SignUp button
-    },
-    logoutButton: {
-        backgroundColor: "red", // For testing logout functionality
     },
 });
 
