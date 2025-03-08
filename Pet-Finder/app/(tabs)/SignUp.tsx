@@ -1,5 +1,8 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { supabase } from '../../lib/supabase';
+import bcrypt from 'bcryptjs';
 
 const { width } = Dimensions.get('window');
 
@@ -58,6 +61,44 @@ const styles = StyleSheet.create({
 });
 
 const SignUpForm = () => {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleSignUp = async () => {
+    try {
+      // Hash the password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      // Save user to Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password: hashedPassword,
+        options: {
+          data: {
+            full_name: fullName,
+            date_of_birth: dateOfBirth,
+            phone_number: phoneNumber,
+          },
+        },
+      });
+
+      if (error) {
+        Alert.alert('Sign Up Failed', error.message);
+        return;
+      }
+
+      Alert.alert('Sign Up Successful', 'Please check your email to verify your account.');
+      router.replace('/login');
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred during sign up.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
@@ -65,30 +106,48 @@ const SignUpForm = () => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Full Name</Text>
-        <TextInput style={styles.input} placeholder="Dolores Roosevelt" />
+        <TextInput style={styles.input} placeholder="Dolores Roosevelt" value={fullName} onChangeText={setFullName} />
       </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="doloresdelanoroosevelt@upr.edu" keyboardType="email-address" />
+        <TextInput
+          style={styles.input}
+          placeholder="doloresdelanoroosevelt@upr.edu"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
       </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Date of Birth</Text>
-        <TextInput style={styles.input} placeholder="2/29/2001" />
+        <TextInput style={styles.input} placeholder="2/29/2001" value={dateOfBirth} onChangeText={setDateOfBirth} />
       </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Phone Number</Text>
-        <TextInput style={styles.input} placeholder="(787)123-4567" keyboardType="phone-pad" />
+        <TextInput
+          style={styles.input}
+          placeholder="(787)123-4567"
+          keyboardType="phone-pad"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+        />
       </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Set Password</Text>
-        <TextInput style={styles.input} placeholder="*******" secureTextEntry />
+        <TextInput
+          style={styles.input}
+          placeholder="*******"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 

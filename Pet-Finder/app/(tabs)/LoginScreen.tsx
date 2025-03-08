@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, Styl
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import bcrypt from 'bcryptjs';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState("");
@@ -16,19 +17,27 @@ export default function LoginScreen() {
     const handleLogin = async () => {
         setLoading(true);
 
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        // Fetch the user's hashed password from the database
+        const { data: userData, error: userError } = await supabase
+            .from("users")
+            .select("id, password, two_factor_enabled, two_factor_method")
+            .eq("email", email)
+            .single();
 
-        if (error) {
-            Alert.alert("Login Failed", error.message);
+        if (userError) {
+            Alert.alert("Login Failed", userError.message);
             setLoading(false);
             return;
         }
 
-        const { data: userData } = await supabase
-            .from("users")
-            .select("id, two_factor_enabled, two_factor_method")
-            .eq("id", data.user.id)
-            .single();
+        // Compare the provided password with the hashed password
+        const isMatch = await bcrypt.compare(password, userData.password);
+
+        if (!isMatch) {
+            Alert.alert("Login Failed", "Invalid password");
+            setLoading(false);
+            return;
+        }
 
         if (userData?.two_factor_enabled) {
             setRequiresOtp(true);
