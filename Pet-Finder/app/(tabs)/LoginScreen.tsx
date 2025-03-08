@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
@@ -10,56 +10,68 @@ export default function LoginScreen() {
     const [loading, setLoading] = useState(false);
     const [requiresOtp, setRequiresOtp] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [errorMessage, setErrorMessage] = useState(""); // 🔴 New State for Error Messages
     const router = useRouter();
 
+    // 🔹 Handles user login
     const handleLogin = async () => {
+        console.log("🟡 Attempting login...");
         setLoading(true);
-
-        // Authenticate with Supabase
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password, // No need to hash the password manually
-        });
-
-        if (error) {
-            Alert.alert("Login Failed", error.message);
-            setLoading(false);
-            return;
-        }
-
-        // Check for two-factor authentication (if applicable)
-        const { data: userData, error: userError } = await supabase
-            .from("users")
-            .select("id, two_factor_enabled")
-            .eq("email", email)
-            .single();
-
-        if (userError) {
-            Alert.alert("Login Failed", userError.message);
-            setLoading(false);
-            return;
-        }
-
-        if (userData?.two_factor_enabled) {
-            setRequiresOtp(true);
-            setUser(userData);
-        } else {
+        setErrorMessage(""); // Clear any previous error messages
+    
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+    
+            if (error) {
+                setErrorMessage(error.message);
+                setLoading(false);
+                return;
+            }
+    
+            // Fetch authenticated user
+            const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+            if (userError) {
+                setErrorMessage("Could not fetch user details.");
+                setLoading(false);
+                return;
+            }
+    
+            // Check if 2FA is enabled
+            const { data: userDetails } = await supabase
+                .from("users")
+                .select("id, two_factor_enabled, two_factor_method")
+                .eq("id", userData.user.id)
+                .single();
+    
+            if (userDetails?.two_factor_enabled) {
+                setRequiresOtp(true);
+                return;
+            }
+    
+            // ✅ Login Success, Redirect
             router.replace("/(tabs)/");
+        } catch (err) {
+            setErrorMessage("An unexpected error occurred.");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
-
     const verifyOtp = async () => {
         setLoading(true);
+    
         const { data, error } = await supabase.rpc("validate_otp", { user_id: user.id, otp });
-
+    
         if (error) {
-            Alert.alert("Invalid OTP", error.message);
+            setErrorMessage("Invalid OTP. Please try again.");
+            setOtp("");
             setLoading(false);
             return;
         }
-
+    
         router.replace("/(tabs)/");
         setLoading(false);
     };
@@ -70,6 +82,7 @@ export default function LoginScreen() {
             <Text style={styles.title}>Sign in to your Account</Text>
             <Text style={styles.subtitle}>Enter your email and password to log in</Text>
 
+            {/* Email Input */}
             <TextInput
                 placeholder="Email"
                 style={styles.input}
@@ -79,6 +92,7 @@ export default function LoginScreen() {
                 onChangeText={setEmail}
             />
 
+            {/* Password Input */}
             <TextInput
                 placeholder="Password"
                 style={styles.input}
@@ -87,40 +101,13 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={styles.forgotPassword}>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            {/* 🔴 Display Error Message Here */}
+            {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
+            {/* Login Button */}
+            <TouchableOpacity onPress={handleLogin} style={styles.loginButton} disabled={loading}>
+                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.loginButtonText}>Log In</Text>}
             </TouchableOpacity>
-
-            {!requiresOtp ? (
-                <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-                    <Text style={styles.loginButtonText}>Log In</Text>
-                </TouchableOpacity>
-            ) : (
-                <>
-                    <TextInput
-                        placeholder="Enter OTP"
-                        style={styles.input}
-                        keyboardType="numeric"
-                        value={otp}
-                        onChangeText={setOtp}
-                    />
-
-                    <TouchableOpacity onPress={verifyOtp} style={styles.verifyButton}>
-                        <Text style={styles.verifyButtonText}>Verify OTP</Text>
-                    </TouchableOpacity>
-                </>
-            )}
-
-            <TouchableOpacity style={styles.googleButton}>
-                <Text style={styles.googleButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>Don't have an account? </Text>
-                <TouchableOpacity onPress={() => router.replace("/signup")}>
-                    <Text style={styles.signupLink}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
         </View>
     );
 }
@@ -163,14 +150,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#333333",
     },
-    forgotPassword: {
-        alignSelf: "flex-end",
-        marginBottom: 20,
-    },
-    forgotPasswordText: {
-        color: "#16A849",
-        fontSize: 14,
-    },
     loginButton: {
         backgroundColor: "#16A849",
         padding: 15,
@@ -184,45 +163,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
     },
-    verifyButton: {
-        backgroundColor: "green",
-        padding: 15,
-        borderRadius: 8,
-        width: "100%",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    verifyButtonText: {
-        color: "#ffffff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    googleButton: {
-        backgroundColor: "#ffffff",
-        padding: 15,
-        borderRadius: 8,
-        width: "100%",
-        alignItems: "center",
-        borderWidth: 1,
-        borderColor: "#cccccc",
-        marginBottom: 20,
-    },
-    googleButtonText: {
-        color: "#333333",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    signupContainer: {
-        flexDirection: "row",
-        justifyContent: "center",
-    },
-    signupText: {
-        color: "#666666",
+    errorText: {
+        color: "red", // 🔴 Makes Error Message Red
         fontSize: 14,
-    },
-    signupLink: {
-        color: "#16A849",
-        fontSize: 14,
-        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 10,
     },
 });
+
