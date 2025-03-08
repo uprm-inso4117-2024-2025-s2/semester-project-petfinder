@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "expo-image-picker": "^16.0.6"
   }
 }

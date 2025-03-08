@@ -8,12 +8,17 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
+
+// Import the placeholder image
+import ProfileImagePlaceholder from "../../assets/images/profileImageplaceholder.jpeg"; // Adjust the path as needed
 
 export default function ProfileScreen() {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null); // No image initially
 
   const [user, setUser] = useState({
     name: "Student Name",
@@ -25,6 +30,27 @@ export default function ProfileScreen() {
 
   const handleChange = (field: keyof typeof user, value: string) => {
     setUser({ ...user, [field]: value });
+  };
+
+  // Function to pick an image from the gallery
+  const pickImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access gallery is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
   };
 
   return (
@@ -39,21 +65,13 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Profile Image */}
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: "https://i.imgur.com/4u1lxaA.png" }}
+          source={profileImage ? { uri: profileImage } : ProfileImagePlaceholder}
           style={styles.profileImage}
         />
-        <TouchableOpacity
-          style={styles.editIcon}
-          onPress={() => setIsEditing(!isEditing)}
-        >
-          <Ionicons
-            name={isEditing ? "checkmark-circle" : "pencil"}
-            size={22}
-            color="white"
-          />
+        <TouchableOpacity style={styles.editIcon} onPress={pickImage}>
+          <Ionicons name="camera" size={22} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -167,8 +185,9 @@ const styles = StyleSheet.create({
     borderRadius: 80,
   },
   editIcon: {
-    bottom: 30,
-    left: 45,
+    position: "absolute",
+    bottom: 10,
+    right: 10,
     backgroundColor: "#16A849",
     borderRadius: 20,
     padding: 6,
@@ -192,8 +211,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 12,
     borderRadius: 8,
-    borderWidth: 1, // Default border
-    borderColor: "#E0E0E0", // Light border when not editing
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
   inputWithIcon: {
     flexDirection: "row",
@@ -209,8 +228,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   editable: {
-    borderWidth: 2, // Thicker border when editing
-    borderColor: "#16A849", // Green border to indicate active editing
+    borderWidth: 2,
+    borderColor: "#16A849",
     backgroundColor: "#F8F8F8",
     paddingHorizontal: 5,
   },
