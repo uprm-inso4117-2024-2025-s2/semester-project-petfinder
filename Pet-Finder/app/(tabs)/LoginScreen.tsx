@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import bcrypt from 'bcryptjs';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState("");
@@ -17,24 +15,27 @@ export default function LoginScreen() {
     const handleLogin = async () => {
         setLoading(true);
 
-        // Fetch the user's hashed password from the database
+        // Authenticate with Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password, // No need to hash the password manually
+        });
+
+        if (error) {
+            Alert.alert("Login Failed", error.message);
+            setLoading(false);
+            return;
+        }
+
+        // Check for two-factor authentication (if applicable)
         const { data: userData, error: userError } = await supabase
             .from("users")
-            .select("id, password, two_factor_enabled, two_factor_method")
+            .select("id, two_factor_enabled")
             .eq("email", email)
             .single();
 
         if (userError) {
             Alert.alert("Login Failed", userError.message);
-            setLoading(false);
-            return;
-        }
-
-        // Compare the provided password with the hashed password
-        const isMatch = await bcrypt.compare(password, userData.password);
-
-        if (!isMatch) {
-            Alert.alert("Login Failed", "Invalid password");
             setLoading(false);
             return;
         }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
-import bcrypt from 'bcryptjs';
 
 const { width } = Dimensions.get('window');
 
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignUpForm = () => {
+const SignUpForm: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
@@ -70,14 +69,10 @@ const SignUpForm = () => {
 
   const handleSignUp = async () => {
     try {
-      // Hash the password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      // Save user to Supabase
+      // No need to hash the password manually; Supabase handles hashing
       const { data, error } = await supabase.auth.signUp({
         email,
-        password: hashedPassword,
+        password,
         options: {
           data: {
             full_name: fullName,
@@ -95,7 +90,7 @@ const SignUpForm = () => {
       Alert.alert('Sign Up Successful', 'Please check your email to verify your account.');
       router.replace('/login');
     } catch (error) {
-      Alert.alert('Error', 'An error occurred during sign up.');
+      Alert.alert('Error', 'An error occurred during sign-up.');
     }
   };
 
