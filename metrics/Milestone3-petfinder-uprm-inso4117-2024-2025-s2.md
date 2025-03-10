@@ -1,6 +1,6 @@
 # Milestone Data
 
-## Date Generated: 2025-03-07
+## Date Generated: 2025-03-10
 | Developer | Points Closed | Percent Contribution | Projected Grade | Lecture Topic Tasks |
 | --------- | ------------- | -------------------- | --------------- | ------------------- |
 | PedroRodz | 0.0 | 0.0% | 0.0% | 0 |
@@ -59,30 +59,30 @@
 
 | Developer | Week #1 | Week #2 | Week #3 | Week #4 | Week #5 | Week #6 | Penalty |
 |---|---|---|---|---|---|---|---|
-| LightPolution | No | No | No | No | No | No | 27.0 |
-| JaseyAcevedo | No | No | No | No | No | No | 27.0 |
-| JoshDG03 | No | No | No | No | No | No | 27.0 |
-| PedroRodz | No | No | No | No | No | No | 27.0 |
-| rafa-quiles | No | No | No | No | No | No | 27.0 |
-| NathBat09 | No | No | No | No | No | No | 27.0 |
-| Gian-Go | No | No | No | No | No | No | 27.0 |
-| Alejandro-DeJesus | No | No | No | No | No | No | 27.0 |
 | frances-sepulveda | No | No | No | No | No | No | 27.0 |
-| GiovanniMaysonet | No | No | No | No | No | No | 27.0 |
-| kevin-d-lopez | No | No | No | No | No | No | 27.0 |
-| rukitoyordan | No | No | No | No | No | No | 27.0 |
-| Yahid1 | No | No | No | No | No | No | 27.0 |
-| KevinIbarra1 | No | No | No | No | No | No | 27.0 |
+| LightPolution | No | No | No | No | No | No | 27.0 |
 | JuanIranzo | No | No | No | No | No | No | 27.0 |
-| diegxarmandx | No | No | No | No | No | No | 27.0 |
-| Jjulianirizarry24 | No | No | No | No | No | No | 27.0 |
-| AlexisTraversoPR | No | No | No | No | No | No | 27.0 |
+| dylanDeJesus21 | No | No | No | No | No | No | 27.0 |
+| JaseyAcevedo | No | No | No | No | No | No | 27.0 |
+| Yahid1 | No | No | No | No | No | No | 27.0 |
+| NathBat09 | No | No | No | No | No | No | 27.0 |
 | Adriana-Isabel | No | No | No | No | No | No | 27.0 |
+| JoshDG03 | No | No | No | No | No | No | 27.0 |
+| Alejandro-DeJesus | No | No | No | No | No | No | 27.0 |
+| diegxarmandx | No | No | No | No | No | No | 27.0 |
 | Andy3017 | No | No | No | No | No | No | 27.0 |
-| Jafet160 | No | No | No | No | No | No | 27.0 |
+| Jjulianirizarry24 | No | No | No | No | No | No | 27.0 |
+| KevinIbarra1 | No | No | No | No | No | No | 27.0 |
 | diegorobles2 | No | No | No | No | No | No | 27.0 |
 | johnsantiago9 | No | No | No | No | No | No | 27.0 |
-| dylanDeJesus21 | No | No | No | No | No | No | 27.0 |
+| rukitoyordan | No | No | No | No | No | No | 27.0 |
+| Gian-Go | No | No | No | No | No | No | 27.0 |
+| Jafet160 | No | No | No | No | No | No | 27.0 |
+| AlexisTraversoPR | No | No | No | No | No | No | 27.0 |
+| PedroRodz | No | No | No | No | No | No | 27.0 |
+| rafa-quiles | No | No | No | No | No | No | 27.0 |
+| GiovanniMaysonet | No | No | No | No | No | No | 27.0 |
+| kevin-d-lopez | No | No | No | No | No | No | 27.0 |
 # Metrics Generation Logs
 
 | Message |

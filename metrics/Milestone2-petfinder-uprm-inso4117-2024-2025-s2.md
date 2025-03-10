@@ -1,88 +1,88 @@
 # Milestone Data
 
-## Date Generated: 2025-03-07
+## Date Generated: 2025-03-10
 | Developer | Points Closed | Percent Contribution | Projected Grade | Lecture Topic Tasks |
 | --------- | ------------- | -------------------- | --------------- | ------------------- |
-| PedroRodz | 0.0 | 0.0% | 0.0% | 0 |
-| JaseyAcevedo | 0.0 | 0.0% | 0.0% | 0 |
-| Jafet160 | 0.0 | 0.0% | 0.0% | 0 |
-| JuanIranzo | 0.0 | 0.0% | 0.0% | 0 |
-| diegxarmandx | 0.0 | 0.0% | 0.0% | 0 |
-| Andy3017 | 0.0 | 0.0% | 0.0% | 0 |
-| Yahid1 | 15.0 | 39.0% | 100.0% | 0 |
-| NathBat09 | 0.0 | 0.0% | 0.0% | 0 |
-| Adriana-Isabel | 0.0 | 0.0% | 0.0% | 0 |
-| GiovanniMaysonet | 0.0 | 0.0% | 0.0% | 0 |
-| dylanDeJesus21 | 0.0 | 0.0% | 0.0% | 0 |
-| LightPolution | 0.0 | 0.0% | 0.0% | 0 |
-| diegorobles2 | 0.0 | 0.0% | 0.0% | 0 |
-| Gian-Go | 0.0 | 0.0% | 0.0% | 0 |
-| KevinIbarra1 | 0.0 | 0.0% | 0.0% | 0 |
-| rukitoyordan | 0.0 | 0.0% | 0.0% | 0 |
-| Alejandro-DeJesus | 0.0 | 0.0% | 0.0% | 0 |
-| JoshDG03 | 23.5 | 61.0% | 100.0% | 1 |
-| rafa-quiles | 0.0 | 0.0% | 0.0% | 0 |
-| AlexisTraversoPR | 0.0 | 0.0% | 0.0% | 0 |
-| frances-sepulveda | 0.0 | 0.0% | 0.0% | 0 |
-| kevin-d-lopez | 0.0 | 0.0% | 0.0% | 0 |
-| Total | 38.47548427689708 | /100% | /100% | 1 |
+| PedroRodz | 23.8 | 5.9% | 0.0% | 1 |
+| JaseyAcevedo | 13.9 | 3.4% | 0.0% | 0 |
+| Jafet160 | 12.5 | 3.1% | 0.0% | 0 |
+| JuanIranzo | 25.0 | 6.2% | 0.0% | 0 |
+| diegxarmandx | 12.5 | 3.1% | 0.0% | 0 |
+| Andy3017 | 25.0 | 6.2% | 0.0% | 0 |
+| Yahid1 | 15.0 | 3.7% | 0.0% | 0 |
+| NathBat09 | 24.0 | 5.9% | 0.0% | 0 |
+| Adriana-Isabel | 20.0 | 4.9% | 0.0% | 0 |
+| GiovanniMaysonet | 9.3 | 2.3% | 0.0% | 0 |
+| dylanDeJesus21 | 18.2 | 4.5% | 0.0% | 1 |
+| LightPolution | 13.2 | 3.3% | 0.0% | 0 |
+| diegorobles2 | 17.9 | 4.4% | 0.0% | 0 |
+| Gian-Go | 25.0 | 6.2% | 0.0% | 0 |
+| KevinIbarra1 | 17.9 | 4.4% | 0.0% | 0 |
+| rukitoyordan | 18.6 | 4.6% | 100.0% | 0 |
+| Alejandro-DeJesus | 4.6 | 1.1% | 0.0% | 0 |
+| JoshDG03 | 23.5 | 5.8% | 0.0% | 1 |
+| rafa-quiles | 7.6 | 1.9% | 0.0% | 0 |
+| AlexisTraversoPR | 40.0 | 9.9% | 0.0% | 0 |
+| frances-sepulveda | 18.6 | 4.6% | 100.0% | 0 |
+| kevin-d-lopez | 18.2 | 4.5% | 0.0% | 1 |
+| Total | 404.3606627973931 | /100% | /100% | 4 |
 
 
 ## Sprint Task Completion
 
-| Developer | [current] S1 (2025/02/24-2025/03/08) | S2 (2025/03/08-2025/03/21) |
+| Developer | S1 (2025/02/24-2025/03/08) | [current] S2 (2025/03/08-2025/03/21) |
 |---|---|---|
-| PedroRodz | 0/1 | 0/1 |
-| JaseyAcevedo | 0/1 | 0/1 |
-| Jafet160 | 0/1 | 0/1 |
-| JuanIranzo | 0/1 | 0/1 |
-| diegxarmandx | 0/1 | 0/1 |
-| Andy3017 | 0/1 | 0/1 |
+| PedroRodz | 2/1 | 0/1 |
+| JaseyAcevedo | 1/1 | 0/1 |
+| Jafet160 | 1/1 | 0/1 |
+| JuanIranzo | 1/1 | 0/1 |
+| diegxarmandx | 1/1 | 0/1 |
+| Andy3017 | 1/1 | 0/1 |
 | Yahid1 | 1/1 | 0/1 |
-| NathBat09 | 0/1 | 0/1 |
-| Adriana-Isabel | 0/1 | 0/1 |
-| GiovanniMaysonet | 0/1 | 0/1 |
-| dylanDeJesus21 | 0/1 | 0/1 |
-| LightPolution | 0/1 | 0/1 |
-| diegorobles2 | 0/1 | 0/1 |
-| Gian-Go | 0/1 | 0/1 |
-| KevinIbarra1 | 0/1 | 0/1 |
-| rukitoyordan | 0/1 | 0/1 |
-| Alejandro-DeJesus | 0/1 | 0/1 |
+| NathBat09 | 1/1 | 0/1 |
+| Adriana-Isabel | 1/1 | 0/1 |
+| GiovanniMaysonet | 1/1 | 0/1 |
+| dylanDeJesus21 | 1/1 | 0/1 |
+| LightPolution | 1/1 | 0/1 |
+| diegorobles2 | 1/1 | 0/1 |
+| Gian-Go | 1/1 | 0/1 |
+| KevinIbarra1 | 1/1 | 0/1 |
+| rukitoyordan | 1/1 | 1/1 |
+| Alejandro-DeJesus | 1/1 | 0/1 |
 | JoshDG03 | 1/1 | 0/1 |
-| rafa-quiles | 0/1 | 0/1 |
-| AlexisTraversoPR | 0/1 | 0/1 |
-| frances-sepulveda | 0/1 | 0/1 |
-| kevin-d-lopez | 0/1 | 0/1 |
+| rafa-quiles | 1/1 | 0/1 |
+| AlexisTraversoPR | 2/1 | 0/1 |
+| frances-sepulveda | 1/1 | 1/1 |
+| kevin-d-lopez | 1/1 | 0/1 |
 
 ## Weekly Discussion Participation
 
 | Developer | Week #1 | Week #2 | Week #3 | Week #4 | Penalty |
 |---|---|---|---|---|---|
-| LightPolution | No | No | No | No | 14.0 |
-| JaseyAcevedo | No | No | No | No | 14.0 |
-| JoshDG03 | No | No | No | No | 14.0 |
-| PedroRodz | No | No | No | No | 14.0 |
-| rafa-quiles | No | No | No | No | 14.0 |
-| NathBat09 | No | No | No | No | 14.0 |
-| Gian-Go | No | No | No | No | 14.0 |
-| Alejandro-DeJesus | No | No | No | No | 14.0 |
-| frances-sepulveda | No | No | No | No | 14.0 |
-| GiovanniMaysonet | No | No | No | No | 14.0 |
-| kevin-d-lopez | No | No | No | No | 14.0 |
-| rukitoyordan | No | No | No | No | 14.0 |
-| Yahid1 | No | No | No | No | 14.0 |
-| KevinIbarra1 | No | No | No | No | 14.0 |
-| JuanIranzo | No | No | No | No | 14.0 |
-| diegxarmandx | No | No | No | No | 14.0 |
-| Jjulianirizarry24 | No | No | No | No | 14.0 |
-| AlexisTraversoPR | No | No | No | No | 14.0 |
-| Adriana-Isabel | No | No | No | No | 14.0 |
-| Andy3017 | No | No | No | No | 14.0 |
-| Jafet160 | No | No | No | No | 14.0 |
-| diegorobles2 | No | No | No | No | 14.0 |
-| johnsantiago9 | No | No | No | No | 14.0 |
-| dylanDeJesus21 | No | No | No | No | 14.0 |
+| frances-sepulveda | Yes | No | No | No | 9.0 |
+| LightPolution | Yes | Yes | No | No | 5.0 |
+| JuanIranzo | Yes | Yes | No | No | 5.0 |
+| dylanDeJesus21 | Yes | Yes | No | No | 5.0 |
+| JaseyAcevedo | Yes | Yes | No | No | 5.0 |
+| Yahid1 | Yes | Yes | No | No | 5.0 |
+| NathBat09 | Yes | Yes | No | No | 5.0 |
+| Adriana-Isabel | Yes | Yes | No | No | 5.0 |
+| JoshDG03 | No | Yes | No | No | 7.0 |
+| Alejandro-DeJesus | Yes | Yes | No | No | 5.0 |
+| diegxarmandx | Yes | Yes | No | No | 5.0 |
+| Andy3017 | Yes | Yes | No | No | 5.0 |
+| Jjulianirizarry24 | Yes | Yes | No | No | 5.0 |
+| KevinIbarra1 | Yes | Yes | No | No | 5.0 |
+| diegorobles2 | Yes | Yes | No | No | 5.0 |
+| johnsantiago9 | Yes | Yes | No | No | 5.0 |
+| rukitoyordan | No | Yes | No | No | 7.0 |
+| Gian-Go | Yes | Yes | No | No | 5.0 |
+| Jafet160 | Yes | Yes | No | No | 5.0 |
+| AlexisTraversoPR | Yes | Yes | No | No | 5.0 |
+| PedroRodz | Yes | Yes | No | No | 5.0 |
+| rafa-quiles | Yes | Yes | No | No | 5.0 |
+| GiovanniMaysonet | Yes | Yes | No | No | 5.0 |
+| kevin-d-lopez | No | Yes | No | No | 7.0 |
 # Metrics Generation Logs
 
 | Message |
@@ -90,23 +90,23 @@
 | WARNING: Milestone due date in config doesn't match milestone due date on Github |
 | INFO: Found Project(name='petfinder', number=8, url='https://github.com/orgs/uprm-inso4117-2024-2025-s2/projects/8', public=False) |
 | WARNING: Project visibility is set to private. This can lead to issues not being found if the Personal Access Token doesn't have permissions for viewing private projects. |
-| WARNING: PedroRodz hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: JaseyAcevedo hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: Jafet160 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: JuanIranzo hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: diegxarmandx hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: Andy3017 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: NathBat09 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: Adriana-Isabel hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: GiovanniMaysonet hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: dylanDeJesus21 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: LightPolution hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: diegorobles2 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: Gian-Go hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: KevinIbarra1 hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: rukitoyordan hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: Alejandro-DeJesus hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: rafa-quiles hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: AlexisTraversoPR hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: frances-sepulveda hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
-| WARNING: kevin-d-lopez hasn't completed the minimum 1 task(s) required for sprint 2025/02/24-2025/03/08 |
+| WARNING: PedroRodz hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: JaseyAcevedo hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Jafet160 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: JuanIranzo hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: diegxarmandx hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Andy3017 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Yahid1 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: NathBat09 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Adriana-Isabel hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: GiovanniMaysonet hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: dylanDeJesus21 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: LightPolution hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: diegorobles2 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Gian-Go hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: KevinIbarra1 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: Alejandro-DeJesus hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: JoshDG03 hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: rafa-quiles hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: AlexisTraversoPR hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |
+| WARNING: kevin-d-lopez hasn't completed the minimum 1 task(s) required for sprint 2025/03/08-2025/03/21 |

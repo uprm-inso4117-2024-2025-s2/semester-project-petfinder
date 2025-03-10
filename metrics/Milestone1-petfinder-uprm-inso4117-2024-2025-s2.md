@@ -1,6 +1,6 @@
 # Milestone Data
 
-## Date Generated: 2025-03-07
+## Date Generated: 2025-03-10
 | Developer | Points Closed | Percent Contribution | Projected Grade | Lecture Topic Tasks |
 | --------- | ------------- | -------------------- | --------------- | ------------------- |
 | PedroRodz | 81.8 | 5.5% | 100.0% | 0 |
@@ -59,30 +59,30 @@
 
 | Developer | Week #1 | Week #2 | Week #3 | Week #4 | Penalty |
 |---|---|---|---|---|---|
-| LightPolution | No | No | No | No | 14.0 |
-| JaseyAcevedo | No | No | No | No | 14.0 |
-| JoshDG03 | No | No | No | No | 14.0 |
-| PedroRodz | No | No | No | No | 14.0 |
-| rafa-quiles | No | No | No | No | 14.0 |
-| NathBat09 | No | No | No | No | 14.0 |
-| Gian-Go | No | No | No | No | 14.0 |
-| Alejandro-DeJesus | No | No | No | No | 14.0 |
-| frances-sepulveda | No | No | No | No | 14.0 |
-| GiovanniMaysonet | No | No | No | No | 14.0 |
-| kevin-d-lopez | No | No | No | No | 14.0 |
-| rukitoyordan | No | No | No | No | 14.0 |
-| Yahid1 | No | No | No | No | 14.0 |
-| KevinIbarra1 | No | No | No | No | 14.0 |
-| JuanIranzo | No | No | No | No | 14.0 |
-| diegxarmandx | No | No | No | No | 14.0 |
-| Jjulianirizarry24 | No | No | No | No | 14.0 |
-| AlexisTraversoPR | No | No | No | No | 14.0 |
-| Adriana-Isabel | No | No | No | No | 14.0 |
-| Andy3017 | No | No | No | No | 14.0 |
-| Jafet160 | No | No | No | No | 14.0 |
-| diegorobles2 | No | No | No | No | 14.0 |
-| johnsantiago9 | No | No | No | No | 14.0 |
-| dylanDeJesus21 | No | No | No | No | 14.0 |
+| frances-sepulveda | No | Yes | Yes | Yes | 2.0 |
+| LightPolution | No | Yes | No | Yes | 4.0 |
+| JuanIranzo | No | Yes | Yes | Yes | 2.0 |
+| dylanDeJesus21 | Yes | Yes | Yes | Yes | 0.0 |
+| JaseyAcevedo | No | Yes | Yes | Yes | 2.0 |
+| Yahid1 | Yes | Yes | Yes | Yes | 0.0 |
+| NathBat09 | Yes | Yes | Yes | Yes | 0.0 |
+| Adriana-Isabel | Yes | Yes | Yes | Yes | 0.0 |
+| JoshDG03 | No | Yes | Yes | Yes | 2.0 |
+| Alejandro-DeJesus | Yes | Yes | Yes | Yes | 0.0 |
+| diegxarmandx | Yes | Yes | Yes | Yes | 0.0 |
+| Andy3017 | Yes | Yes | Yes | Yes | 0.0 |
+| Jjulianirizarry24 | Yes | Yes | Yes | Yes | 0.0 |
+| KevinIbarra1 | No | Yes | Yes | Yes | 2.0 |
+| diegorobles2 | No | No | Yes | Yes | 5.0 |
+| johnsantiago9 | Yes | Yes | Yes | Yes | 0.0 |
+| rukitoyordan | No | Yes | Yes | Yes | 2.0 |
+| Gian-Go | Yes | Yes | Yes | Yes | 0.0 |
+| Jafet160 | No | Yes | No | Yes | 4.0 |
+| AlexisTraversoPR | Yes | Yes | Yes | Yes | 0.0 |
+| PedroRodz | Yes | Yes | Yes | Yes | 0.0 |
+| rafa-quiles | No | No | Yes | Yes | 5.0 |
+| GiovanniMaysonet | No | Yes | No | Yes | 4.0 |
+| kevin-d-lopez | Yes | Yes | Yes | Yes | 0.0 |
 # Metrics Generation Logs
 
 | Message |
