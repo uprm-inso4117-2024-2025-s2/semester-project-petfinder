@@ -24,6 +24,74 @@ interface Pet {
   };
 }
 
+const InitialData: Pet[] = [
+  {
+    id: 1,
+    name: "Dog 1",
+    type: "Dog",
+    location: {
+      latitude: 18.209533,
+      longitude: -67.140849,
+    },
+  },
+  {
+    id: 2,
+    name: "Dog 2",
+    type: "Dog",
+    location: {
+      latitude: 18.219533,
+      longitude: -67.140849,
+    },
+  },
+  {
+    id: 3,
+    name: "Dog 3",
+    type: "Cat",
+    location: {
+      latitude: 18.219533,
+      longitude: -67.141849,
+    },
+  },
+]
+
+
+function filterData(markers:Pet[], param:string, filter:string): Pet[]{
+
+  // This should be done with SQL but its being done with JavaScript for now
+  let Data: Pet[] = []
+  
+  
+  for (let i=0;i<markers.length;i++){
+    if (filter === " "){
+      if(param === " "){
+        return markers
+      }
+      if(markers[i].name.includes(param)){
+        Data.push(markers[i]);
+      }
+      
+    }
+    else{
+      if(param === ""){
+        if(markers[i].type.includes(filter)){
+          Data.push(markers[i]);
+        }
+      }
+      if(markers[i].name.includes(param) && markers[i].type.includes(filter)){
+        Data.push(markers[i]);
+      }
+
+
+    }
+
+  }
+  
+  
+
+  
+  return Data
+}
+
 
 const styles = StyleSheet.create({
   header: {
@@ -123,39 +191,15 @@ export default function Map() {
         locationSubscription.remove();
       }
     };
-  }, []);
+  }, [userLocation]);
+
   useEffect(() => {
     console.log(`Selected UseEffect: ${searchQuery}`);
-    setData([
-      {
-        id: 1,
-        name: "Dog 1",
-        type: "Dog",
-        location: {
-          latitude: 18.209533,
-          longitude: -67.140849,
-        },
-      },
-      {
-        id: 2,
-        name: "Dog 2",
-        type: "Dog",
-        location: {
-          latitude: 18.219533,
-          longitude: -67.140849,
-        },
-      },
-      {
-        id: 3,
-        name: "Dog 3",
-        type: "Cat",
-        location: {
-          latitude: 18.219533,
-          longitude: -67.141849,
-        },
-      },
-    ]);
+
+    setData(filterData(InitialData,searchQuery,selectedFilter));
   }, [selectedFilter, searchQuery]);
+
+
   const handleFilterPress = (filter: string) => {
 
     setSelectedFilter(filter);
