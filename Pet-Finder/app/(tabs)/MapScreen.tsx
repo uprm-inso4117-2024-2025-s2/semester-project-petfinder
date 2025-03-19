@@ -27,7 +27,7 @@ interface Pet {
 const InitialData: Pet[] = [
   {
     id: 1,
-    name: "Dog 1",
+    name: "Henry",
     type: "Dog",
     location: {
       latitude: 18.209533,
@@ -36,7 +36,7 @@ const InitialData: Pet[] = [
   },
   {
     id: 2,
-    name: "Dog 2",
+    name: "Jose",
     type: "Dog",
     location: {
       latitude: 18.219533,
@@ -45,11 +45,38 @@ const InitialData: Pet[] = [
   },
   {
     id: 3,
-    name: "Dog 3",
+    name: "Lara",
+    type: "Cat",
+    location: {
+      latitude: 18.219633,
+      longitude: -67.141749,
+    },
+  },
+  {
+    id: 4,
+    name: "Ford",
+    type: "Dog",
+    location: {
+      latitude: 18.209543,
+      longitude: -67.140549,
+    },
+  },
+  {
+    id: 5,
+    name: "Pancho",
+    type: "Cat",
+    location: {
+      latitude: 18.219536,
+      longitude: -67.141849,
+    },
+  },
+  {
+    id: 6,
+    name: "Garfield",
     type: "Cat",
     location: {
       latitude: 18.219533,
-      longitude: -67.141849,
+      longitude: -67.142849,
     },
   },
 ]
@@ -59,7 +86,6 @@ function filterData(markers:Pet[], param:string, filter:string): Pet[]{
 
   // This should be done with SQL but its being done with JavaScript for now
   let Data: Pet[] = []
-  
   
   for (let i=0;i<markers.length;i++){
     if (filter === " "){
@@ -87,7 +113,6 @@ function filterData(markers:Pet[], param:string, filter:string): Pet[]{
   }
   
   
-
   
   return Data
 }
@@ -191,7 +216,7 @@ export default function Map() {
         locationSubscription.remove();
       }
     };
-  }, [userLocation]);
+  }, []);
 
   useEffect(() => {
     console.log(`Selected UseEffect: ${searchQuery}`);
@@ -217,10 +242,10 @@ export default function Map() {
         />
       </View>
       <View style={styles.filterContainer}>
-        <TouchableOpacity style={styles.filterButton} onPress={() => handleFilterPress('Dogs')}>
+        <TouchableOpacity style={styles.filterButton} onPress={() => handleFilterPress('Dog')}>
           <Text style={styles.filterButtonText}>Dogs</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton} onPress={() => handleFilterPress('Cats')}>
+        <TouchableOpacity style={styles.filterButton} onPress={() => handleFilterPress('Cat')}>
           <Text style={styles.filterButtonText}>Cats</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.filterButton} onPress={() => handleFilterPress('Others')}>
