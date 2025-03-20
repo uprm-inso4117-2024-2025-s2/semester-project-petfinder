@@ -11,22 +11,59 @@ import {
   ScrollView,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import * as ImagePicker from "expo-image-picker";
 
 export default function ReportPetScreen() {
+  // Common state fields
   const [petStatus, setPetStatus] = useState<"lost" | "found">("lost");
   const [petName, setPetName] = useState("");
   const [lastSeenLocation, setLastSeenLocation] = useState("");
-  const [dateTime, setDateTime] = useState(""); // display string
+  const [dateTime, setDateTime] = useState(""); // Display string
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [description, setDescription] = useState("");
-  const [contactInfo, setContactInfo] = useState("");
+
+  // For both Lost and Found, we now use separate contact fields:
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+
+  // Additional field for Found reports
+  const [petCondition, setPetCondition] = useState<"" | "in my custody" | "roaming" | "deceased">("");
+
   const router = useRouter();
 
-  // Placeholder photo upload logic
-  const handlePhotoUpload = () => {
-    Alert.alert("Photo Upload", "Placeholder for image picker logic.");
+  // Photo picking logic using Expo ImagePicker
+  const handlePhotoUpload = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Camera roll permissions are needed to upload a photo."
+        );
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images, // using deprecated API if necessary
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotoUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while picking an image.");
+    }
+  };
+
+  // Simple function to remove the photo
+  const handleRemovePhoto = () => {
+    setPhotoUri(null);
   };
 
   const handleGoBackHome = () => {
@@ -48,13 +85,41 @@ export default function ReportPetScreen() {
   };
 
   const handleSubmit = () => {
-    if (!petName || !lastSeenLocation) {
+    // Validate common fields
+    if (!lastSeenLocation) {
+      Alert.alert("Required Field Missing", "Please fill out the Last Seen Location.");
+      return;
+    }
+    if (!dateTime) {
+      Alert.alert("Required Field Missing", "Please pick the Last Seen Date and Time.");
+      return;
+    }
+    if (!contactName || !contactPhone || !contactEmail) {
       Alert.alert(
-        "Required Fields Missing",
-        "Please fill out Pet Name and Last Seen Location."
+        "Required Field Missing",
+        "Please fill out your Contact Information (Name, Phone, Email)."
       );
       return;
     }
+
+    if (petStatus === "lost") {
+      // Lost Pet validations
+      if (!petName) {
+        Alert.alert("Required Field Missing", "Please fill out the Pet Name.");
+        return;
+      }
+      if (!description) {
+        Alert.alert("Required Field Missing", "Please fill out the Description.");
+        return;
+      }
+    } else {
+      // Found Pet validations
+      if (!petCondition) {
+        Alert.alert("Required Field Missing", "Please select the Pet Condition.");
+        return;
+      }
+    }
+
     const formData = {
       petStatus,
       petName,
@@ -62,17 +127,25 @@ export default function ReportPetScreen() {
       dateTime,
       photoUri,
       description,
-      contactInfo,
+      petCondition: petStatus === "found" ? petCondition : null,
+      contactName,
+      contactPhone,
+      contactEmail,
     };
+
     console.log("Form Data:", formData);
     Alert.alert("Submitted!", "Your report has been submitted.");
+  };
+
+  // Simple function to show a tooltip Alert
+  const showTooltip = (title: string, message: string) => {
+    Alert.alert(title, message);
   };
 
   return (
     <View style={styles.screenContainer}>
       {/* HEADER */}
       <View style={styles.header}>
-        {/* Top row with back button and logo */}
         <View style={styles.headerTopRow}>
           <TouchableOpacity style={styles.backButton} onPress={handleGoBackHome}>
             <Image
@@ -85,7 +158,6 @@ export default function ReportPetScreen() {
             style={styles.headerImage}
           />
         </View>
-        {/* Alarm image below the top row */}
         <View style={styles.alarmContainer}>
           <Image
             source={require("../../assets/images/Pet_Finder_Assets/alarm.png")}
@@ -94,53 +166,63 @@ export default function ReportPetScreen() {
         </View>
       </View>
 
-      {/* SCROLLABLE CONTENT */}
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Title */}
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>
-            Have you lost your pet?{"\n"}Or found someone else's?
+            {petStatus === "lost" ? "Report a Lost Pet" : "Report a Found/Stray Pet"}
           </Text>
         </View>
 
         {/* Pet Status */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Pet status</Text>
-          <View style={styles.radioGroup}>
+          <Text style={styles.boxLabel}>
+            Pet Status (Required)
             <TouchableOpacity
-              style={styles.radioOption}
-              onPress={() => setPetStatus("lost")}
+              onPress={() =>
+                showTooltip(
+                  "Pet Status",
+                  petStatus === "lost"
+                    ? "Must select 'Lost' for lost pet reports."
+                    : "Must select 'Found/Stray' for found pet reports."
+                )
+              }
             >
-              <View
-                style={[
-                  styles.radioCircle,
-                  petStatus === "lost" && styles.selectedCircle,
-                ]}
-              />
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
+          <View style={styles.radioGroup}>
+            <TouchableOpacity style={styles.radioOption} onPress={() => setPetStatus("lost")}>
+              <View style={[styles.radioCircle, petStatus === "lost" && styles.selectedCircle]} />
               <Text style={styles.radioText}>Lost</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.radioOption}
-              onPress={() => setPetStatus("found")}
-            >
-              <View
-                style={[
-                  styles.radioCircle,
-                  petStatus === "found" && styles.selectedCircle,
-                ]}
-              />
-              <Text style={styles.radioText}>Found/stray</Text>
+            <TouchableOpacity style={styles.radioOption} onPress={() => setPetStatus("found")}>
+              <View style={[styles.radioCircle, petStatus === "found" && styles.selectedCircle]} />
+              <Text style={styles.radioText}>Found/Stray</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Pet Name */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Enter the pet name</Text>
+          <Text style={styles.boxLabel}>
+            {petStatus === "lost" ? "Pet Name (Required)" : "Pet Name (Optional)"}
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Pet Name",
+                  petStatus === "lost"
+                    ? "Enter the name of the lost pet."
+                    : "If known, enter the name of the found pet."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TextInput
             style={styles.boxInput}
-            placeholder="XXXXXX - required"
+            placeholder="Enter pet name"
             placeholderTextColor="#A9A9AC"
             value={petName}
             onChangeText={setPetName}
@@ -149,19 +231,45 @@ export default function ReportPetScreen() {
 
         {/* Last Seen Location */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Enter the last seen nearest location</Text>
+          <Text style={styles.boxLabel}>
+            Last Seen Location (Required)
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Last Seen Location",
+                  petStatus === "lost"
+                    ? "Enter the nearest landmark, address, or GPS coordinates where the pet was last seen."
+                    : "Enter the location where the pet was found."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TextInput
             style={styles.boxInput}
-            placeholder="XXXXXX - required"
+            placeholder="Enter location"
             placeholderTextColor="#A9A9AC"
             value={lastSeenLocation}
             onChangeText={setLastSeenLocation}
           />
         </View>
 
-        {/* Date/Time Picker */}
+        {/* Last Seen Date and Time */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Enter the last seen date and time</Text>
+          <Text style={styles.boxLabel}>
+            Last Seen Date and Time (Required)
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Last Seen Date and Time",
+                  "Select the exact or approximate date and time the pet was last seen or found."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TouchableOpacity style={styles.dateButton} onPress={showDatePicker}>
             <Text style={styles.dateButtonText}>
               {dateTime ? dateTime : "Pick Date and Time"}
@@ -177,18 +285,55 @@ export default function ReportPetScreen() {
 
         {/* Photo Upload */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Submit a photo of your pet</Text>
+          <Text style={styles.boxLabel}>
+            Photo of the Pet (Optional)
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Photo",
+                  "Select a clear image of the pet for identification purposes."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TouchableOpacity style={styles.addPhotoButton} onPress={handlePhotoUpload}>
             <Text style={styles.addPhotoButtonText}>Add Photo</Text>
           </TouchableOpacity>
+          {photoUri && (
+            <>
+              <Image
+                source={{ uri: photoUri }}
+                style={{ width: 200, height: 200, marginTop: 10 }}
+              />
+              <TouchableOpacity style={styles.removePhotoButton} onPress={handleRemovePhoto}>
+                <Text style={styles.removePhotoButtonText}>Remove Photo</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
 
         {/* Description */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Enter a description of your pet</Text>
+          <Text style={styles.boxLabel}>
+            {petStatus === "lost" ? "Description (Required)" : "Description (Optional)"}
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Description",
+                  petStatus === "lost"
+                    ? "Provide details such as breed, color, size, and any distinguishing marks."
+                    : "Optionally provide details like breed, color, size, and distinguishing marks."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TextInput
-            style={styles.boxInput}
-            placeholder="Type your notes - optional"
+            style={[styles.boxInput, { height: 80 }]}
+            placeholder="Enter description"
             placeholderTextColor="#A9A9AC"
             value={description}
             onChangeText={setDescription}
@@ -196,16 +341,103 @@ export default function ReportPetScreen() {
           />
         </View>
 
+        {/* Additional Fields for Found Reports */}
+        {petStatus === "found" && (
+          <View style={styles.boxContainer}>
+            <Text style={styles.boxLabel}>
+              Pet Condition (Required)
+              <TouchableOpacity
+                onPress={() =>
+                  showTooltip(
+                    "Pet Condition",
+                    "Select one: In my custody, Roaming, or Deceased."
+                  )
+                }
+              >
+                <Text style={styles.infoIcon}> ⓘ</Text>
+              </TouchableOpacity>
+            </Text>
+            <View style={styles.radioGroup}>
+              <TouchableOpacity
+                style={styles.radioOption}
+                onPress={() => setPetCondition("in my custody")}
+              >
+                <View
+                  style={[
+                    styles.radioCircle,
+                    petCondition === "in my custody" && styles.selectedCircle,
+                  ]}
+                />
+                <Text style={styles.radioText}>In my custody</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.radioOption}
+                onPress={() => setPetCondition("roaming")}
+              >
+                <View
+                  style={[
+                    styles.radioCircle,
+                    petCondition === "roaming" && styles.selectedCircle,
+                  ]}
+                />
+                <Text style={styles.radioText}>Roaming</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.radioOption}
+                onPress={() => setPetCondition("deceased")}
+              >
+                <View
+                  style={[
+                    styles.radioCircle,
+                    petCondition === "deceased" && styles.selectedCircle,
+                  ]}
+                />
+                <Text style={styles.radioText}>Deceased</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
         {/* Contact Information */}
         <View style={styles.boxContainer}>
-          <Text style={styles.boxLabel}>Contact Information</Text>
+          <Text style={styles.boxLabel}>
+            Contact Information (Required)
+            <TouchableOpacity
+              onPress={() =>
+                showTooltip(
+                  "Contact Information",
+                  petStatus === "lost"
+                    ? "Enter your name, phone number, and email as the submitter."
+                    : "Enter the finder’s name, phone number, and email."
+                )
+              }
+            >
+              <Text style={styles.infoIcon}> ⓘ</Text>
+            </TouchableOpacity>
+          </Text>
           <TextInput
             style={styles.boxInput}
-            placeholder="Type your notes - optional"
+            placeholder="Name"
             placeholderTextColor="#A9A9AC"
-            value={contactInfo}
-            onChangeText={setContactInfo}
-            multiline
+            value={contactName}
+            onChangeText={setContactName}
+          />
+          <TextInput
+            style={styles.boxInput}
+            placeholder="Phone"
+            placeholderTextColor="#A9A9AC"
+            value={contactPhone}
+            onChangeText={setContactPhone}
+            keyboardType="phone-pad"
+          />
+          <TextInput
+            style={styles.boxInput}
+            placeholder="Email"
+            placeholderTextColor="#A9A9AC"
+            value={contactEmail}
+            onChangeText={setContactEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
 
@@ -214,13 +446,13 @@ export default function ReportPetScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
 
-        {/* Extra space at bottom (optional) */}
         <View style={{ height: 30 }} />
       </ScrollView>
     </View>
   );
 }
 
+/* STYLES */
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
@@ -264,7 +496,6 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: "contain",
   },
-  // Scrollable area
   scrollView: {
     flex: 1,
   },
@@ -272,7 +503,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  // Title
   titleContainer: {
     alignItems: "center",
     marginBottom: 20,
@@ -283,7 +513,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "600",
   },
-  // Box style for each section
   boxContainer: {
     borderWidth: 1,
     borderColor: "#6B431F",
@@ -298,13 +527,17 @@ const styles = StyleSheet.create({
     color: "#6B431F",
     marginBottom: 5,
   },
+  infoIcon: {
+    color: "#6B431F",
+    fontSize: 14,
+    marginLeft: 5,
+  },
   boxInput: {
     fontSize: 16,
     color: "#000",
     paddingHorizontal: 5,
     paddingVertical: 4,
   },
-  // Date Button styles
   dateButton: {
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -318,7 +551,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#6B431F",
   },
-  // Radio Buttons
   radioGroup: {
     flexDirection: "row",
     marginTop: 5,
@@ -345,7 +577,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#6B431F",
   },
-  // Photo Upload
   addPhotoButton: {
     backgroundColor: "#FBF0DC",
     borderWidth: 1,
@@ -361,7 +592,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-  // Submit button
+  removePhotoButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#6B431F",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    marginTop: 5,
+  },
+  removePhotoButtonText: {
+    color: "#6B431F",
+    fontSize: 14,
+  },
   submitButton: {
     backgroundColor: "#6B431F",
     borderRadius: 5,
