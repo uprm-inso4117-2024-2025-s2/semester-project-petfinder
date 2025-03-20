@@ -1,10 +1,11 @@
 import { Text, View, Platform, Image, TouchableOpacity, TextInput } from "react-native";
 import { StyleSheet } from "react-native";
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "react-native-screens";
 import * as Location from "expo-location";
-
+import { Pet } from "../../components/pet";
+import Descriptor from "@/components/descriptor";
 
 
 const INITIAL_REGION = {
@@ -14,15 +15,7 @@ const INITIAL_REGION = {
   longitudeDelta: 0.02421
 };
 
-interface Pet {
-  id: number;
-  name: string;
-  type: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-}
+
 
 const InitialData: Pet[] = [
   {
@@ -33,6 +26,8 @@ const InitialData: Pet[] = [
       latitude: 18.209533,
       longitude: -67.140849,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/dog.png"),
+    description: " Hes a big dog"
   },
   {
     id: 2,
@@ -42,6 +37,8 @@ const InitialData: Pet[] = [
       latitude: 18.219533,
       longitude: -67.140849,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/dog.png"),
+    description: " Hes a big Dog"
   },
   {
     id: 3,
@@ -51,6 +48,8 @@ const InitialData: Pet[] = [
       latitude: 18.219633,
       longitude: -67.141749,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/cat.png"),
+    description: " Hes a big cat"
   },
   {
     id: 4,
@@ -60,6 +59,8 @@ const InitialData: Pet[] = [
       latitude: 18.209543,
       longitude: -67.140549,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/dog.png"),
+    description: " Hes a big dog"
   },
   {
     id: 5,
@@ -69,6 +70,8 @@ const InitialData: Pet[] = [
       latitude: 18.219536,
       longitude: -67.141849,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/cat.png"),
+    description: " Hes a big cat"
   },
   {
     id: 6,
@@ -78,6 +81,8 @@ const InitialData: Pet[] = [
       latitude: 18.219533,
       longitude: -67.142849,
     },
+    photo: require("../../assets/images/Pet_Finder_Assets/cat.png"),
+    description: " Hes a big cat"
   },
 ]
 
@@ -257,16 +262,18 @@ export default function Map() {
 
 
       <View style={styles.container}>
-        <MapView initialRegion={INITIAL_REGION} showsUserLocation={true} style={styles.map}>
+        <MapView initialRegion={INITIAL_REGION} showsUserLocation={true} showsMyLocationButton style={styles.map}>
           {data.map((pet) => {
             return (
               <Marker
                 key={pet.id}
                 coordinate={pet.location}
-                title={pet.name}
-                description={pet.type}
                 image={(pet.type === 'Dog') ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
-              />
+              >
+                <Callout>
+                  <Descriptor id={pet.id} name={pet.name} type={pet.type} location={pet.location} photo= {pet.photo} description={pet.description}></Descriptor>
+                </Callout>
+              </Marker>
             );
           })}
 
