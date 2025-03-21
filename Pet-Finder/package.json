@@ -53,6 +53,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@stryker-mutator/core": "^8.7.1",
+    "@stryker-mutator/jest-runner": "^8.7.1",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.72.8",
