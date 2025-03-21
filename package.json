@@ -1,5 +1,8 @@
 {
+  "type": "module",
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.1"
+    "@supabase/supabase-js": "^2.48.1",
+    "dotenv": "^16.4.7",
+    "expo-image-picker": "^16.0.6"
   }
 }

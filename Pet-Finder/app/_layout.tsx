@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { ErrorHandlerProvider } from '../context/ErrorHandlerContext'; 
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -29,10 +30,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      {/* ✅ Wrap the Stack with ErrorHandlerProvider */}
+      <ErrorHandlerProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ErrorHandlerProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
   );
