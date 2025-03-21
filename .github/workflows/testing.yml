@@ -1,28 +1,17 @@
-name: Run Tests on PR
+ name: CI
 
-on:
-  pull_request:
-    branches:
-      - main
+ on:
+   push:
+     branches:
+       - main
 
-jobs:
-  test:
-    name: Run Jest Tests
-    runs-on: ubuntu-latest
+ jobs:
+   build:
+     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+     steps:
+       - name: Get Your Code
+         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18 # Adjust based on your project's version
-          cache: 'yarn' # Use 'npm' if your project uses npm
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-        # Or use: npm ci
-
-      - name: Run Jest tests
-        run: yarn test
+       - name: Say Hello to the World
+         run: echo "Hello, World!"
