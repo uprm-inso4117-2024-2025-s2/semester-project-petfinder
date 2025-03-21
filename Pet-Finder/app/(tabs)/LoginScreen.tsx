@@ -4,112 +4,152 @@ import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
 export default function LoginScreen() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [otp, setOtp] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [requiresOtp, setRequiresOtp] = useState(false);
-    const [user, setUser] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [requiresOtp, setRequiresOtp] = useState(false);
+  const [user, setUser] = useState<any>(null);
     const [errorMessage, setErrorMessage] = useState(""); // 🔴 New State for Error Messages
-    const router = useRouter();
+  const router = useRouter();
 
-    // 🔹 Handles user login
-    const handleLogin = async () => {
-        console.log("🟡 Attempting login...");
-        setLoading(true);
-        setErrorMessage(""); // Clear any previous error messages
-    
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-    
-            if (error) {
-                setErrorMessage(error.message);
-                setLoading(false);
-                return;
-            }
-    
-            // Fetch authenticated user
-            const { data: userData, error: userError } = await supabase.auth.getUser();
-    
-            if (userError) {
-                setErrorMessage("Could not fetch user details.");
-                setLoading(false);
-                return;
-            }
-    
-            // Check if 2FA is enabled
-            const { data: userDetails } = await supabase
-                .from("users")
-                .select("id, two_factor_enabled, two_factor_method")
-                .eq("id", userData.user.id)
-                .single();
-    
-            if (userDetails?.two_factor_enabled) {
-                setRequiresOtp(true);
-                return;
-            }
-    
-            // ✅ Login Success, Redirect
-            router.replace("/(tabs)/");
-        } catch (err) {
-            setErrorMessage("An unexpected error occurred.");
-        } finally {
-            setLoading(false);
-        }
-    };
-    const verifyOtp = async () => {
-        setLoading(true);
-    
-        const { data, error } = await supabase.rpc("validate_otp", { user_id: user.id, otp });
-    
-        if (error) {
-            setErrorMessage("Invalid OTP. Please try again.");
-            setOtp("");
-            setLoading(false);
-            return;
-        }
-    
-        router.replace("/(tabs)/");
-        setLoading(false);
-    };
+  const handleLogin = async () => {
+    setLoading(true);
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.appTitle}>PetFinder</Text>
-            <Text style={styles.title}>Sign in to your Account</Text>
-            <Text style={styles.subtitle}>Enter your email and password to log in</Text>
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-            {/* Email Input */}
-            <TextInput
-                placeholder="Email"
-                style={styles.input}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-            />
+    if (error) {
+      Alert.alert("Login Failed", error.message);
+      setLoading(false);
+      return;
+    }
 
-            {/* Password Input */}
-            <TextInput
-                placeholder="Password"
-                style={styles.input}
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
+    const { data: userData } = await supabase
+      .from("users")
+      .select("id, two_factor_enabled, two_factor_method")
+      .eq("id", data.user.id)
+      .single();
 
-            {/* 🔴 Display Error Message Here */}
-            {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+    if (userData?.two_factor_enabled) {
+      setRequiresOtp(true);
+      setUser(userData);
+    } else {
+      router.replace("/(tabs)/");
+    }
 
-            {/* Login Button */}
-            <TouchableOpacity onPress={handleLogin} style={styles.loginButton} disabled={loading}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.loginButtonText}>Log In</Text>}
-            </TouchableOpacity>
-        </View>
-    );
+    setLoading(false);
+  };
+
+  const verifyOtp = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.rpc("validate_otp", {
+      user_id: user.id,
+      otp,
+    });
+
+    if (error) {
+      Alert.alert("Invalid OTP", error.message);
+      setLoading(false);
+      return;
+    }
+
+    router.replace("/(tabs)/");
+    setLoading(false);
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>Login</Text>
+
+      <TextInput
+        placeholder="Email"
+        style={{
+          width: "100%",
+          borderWidth: 1,
+          padding: 10,
+          marginBottom: 10,
+          borderRadius: 5,
+        }}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        placeholder="Password"
+        style={{
+          width: "100%",
+          borderWidth: 1,
+          padding: 10,
+          marginBottom: 10,
+          borderRadius: 5,
+        }}
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <TouchableOpacity
+        onPress={() => router.push("/(tabs)/reset")}
+        style={{ alignSelf: "flex-end", marginBottom: 15 }}
+      >
+        <Text style={{ color: "#3498db", textDecorationLine: "underline" }}>Forgot Password?</Text>
+      </TouchableOpacity>
+
+      {!requiresOtp ? (
+        <TouchableOpacity
+          onPress={handleLogin}
+          style={{
+            backgroundColor: "#3498db",
+            padding: 12,
+            borderRadius: 5,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>Login</Text>
+          )}
+        </TouchableOpacity>
+      ) : (
+        <>
+          <TextInput
+            placeholder="Enter OTP"
+            style={{
+              width: "100%",
+              borderWidth: 1,
+              padding: 10,
+              marginBottom: 10,
+              borderRadius: 5,
+            }}
+            keyboardType="numeric"
+            value={otp}
+            onChangeText={setOtp}
+          />
+
+          <TouchableOpacity
+            onPress={verifyOtp}
+            style={{
+              backgroundColor: "green",
+              padding: 12,
+              borderRadius: 5,
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>Verify OTP</Text>
+            )}
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
