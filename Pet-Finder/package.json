@@ -21,11 +21,12 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@supabase/supabase-js": "^2.48.1",
+    "bcrypt": "^5.1.1",
     "@testing-library/react-native": "^13.2.0",
     "expo": "~52.0.35",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.6",
-    "expo-crypto": "^14.0.2",
+    "expo-crypto": "~14.0.2",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
     "expo-image-picker": "~16.0.6",
@@ -49,10 +50,12 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-web-maps": "^0.3.0",
-    "react-native-webview": "13.12.5"
+    "react-native-webview": "13.12.5",
+    "expo-auth-session": "~6.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@react-native-community/cli": "latest",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/jest-runner": "^8.7.1",
     "@types/jest": "^29.5.12",

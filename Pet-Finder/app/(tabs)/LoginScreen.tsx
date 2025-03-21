@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -11,6 +10,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [requiresOtp, setRequiresOtp] = useState(false);
   const [user, setUser] = useState<any>(null);
+    const [errorMessage, setErrorMessage] = useState(""); // 🔴 New State for Error Messages
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -151,3 +151,63 @@ export default function LoginScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        padding: 20,
+        backgroundColor: "#ffffff",
+    },
+    appTitle: {
+        fontSize: 32,
+        fontWeight: "bold",
+        color: "#81C090",
+        textAlign: "center",
+        marginBottom: 10,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#333333",
+        marginBottom: 10,
+        textAlign: "center",
+    },
+    subtitle: {
+        fontSize: 16,
+        color: "#666666",
+        marginBottom: 20,
+        textAlign: "center",
+    },
+    input: {
+        width: "100%",
+        height: 50,
+        borderColor: "#cccccc",
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginBottom: 15,
+        fontSize: 16,
+        color: "#333333",
+    },
+    loginButton: {
+        backgroundColor: "#16A849",
+        padding: 15,
+        borderRadius: 8,
+        width: "100%",
+        alignItems: "center",
+        marginBottom: 20,
+    },
+    loginButtonText: {
+        color: "#ffffff",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    errorText: {
+        color: "red", // 🔴 Makes Error Message Red
+        fontSize: 14,
+        textAlign: "center",
+        marginBottom: 10,
+    },
+});
+
