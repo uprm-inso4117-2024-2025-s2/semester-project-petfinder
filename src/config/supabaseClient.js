@@ -1,14 +1,30 @@
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
+import Constants from 'expo-constants';
 
-dotenv.config(); // Load environment variables from .env
+// Use expoConfig if manifest is null
+const appConfig = Constants.expoConfig || Constants.manifest;
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.ANON_KEY;
+if (!appConfig?.extra?.supabaseUrl || !appConfig?.extra?.supabaseAnonKey) {
+  console.error('Supabase URL or anon key not found in config.');
+}
 
-console.log("Supabase URL:", supabaseUrl);
-console.log("Supabase Key:", supabaseKey);
+const supabaseUrl = appConfig.extra.supabaseUrl;
+const supabaseAnonKey = appConfig.extra.supabaseAnonKey;
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+console.log('supabaseUrl:', supabaseUrl);
+console.log('supabaseAnonKey:', supabaseAnonKey);
 
-export default supabase;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+
+/* 
+IMPORTANT
+
+Make sure to add this in app.json inside "expo": { }
+
+    "extra": {
+      "supabaseUrl": "replace_with_url",
+      "supabaseAnonKey": "replace_with_key"
+    },
+
+*/
