@@ -17,7 +17,8 @@ import { Buffer } from "buffer"; // For binary conversion
 import { useRouter } from "expo-router";
 
 import { supabase } from "../../lib/supabase"; // Adjust path as needed
-import ProfileImagePlaceholder from "../../assets/images/profileImageplaceholder.jpeg";
+const ProfileImagePlaceholder = require("../../assets/images/profileImageplaceholder.jpeg");
+
 
 // Define State Machine States
 type ProfileState =
@@ -35,6 +36,8 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [profileState, setProfileState] = useState<ProfileState>("LOADING");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   // Our local user data
   const [user, setUser] = useState({
@@ -42,6 +45,7 @@ export default function ProfileScreen() {
     email: "",
     dob: "",
     phone: "",
+    password: "",
   });
 
   // 1. Fetch user data from Supabase for "eve@example.com"
@@ -64,6 +68,7 @@ export default function ProfileScreen() {
           email: userData.email || "",
           dob: userData.dob || "",
           phone: userData.phone || "",
+          password: userData.password || "",
         });
 
         // If they have an existing profile image URL, store it in state
@@ -135,10 +140,17 @@ export default function ProfileScreen() {
         if (!imageUrl) throw new Error("Failed to retrieve public URL");
   
         // 3. **Update the user's `profile_image_url` in Supabase**
+        const {
+          data: { user: currentUser },
+          error: userFetchError,
+        } = await supabase.auth.getUser();
+        
+        if (userFetchError || !currentUser) throw new Error("Could not retrieve authenticated user");
+        
         const { error: updateError } = await supabase
-          .from("users")
-          .update({ profile_image_url: imageUrl })
-          .eq("id", supabase.auth.user()?.id); // Match by authenticated user ID
+        .from("users")
+        .update({ profile_image_url: imageUrl })
+        .eq("id", currentUser.id);
   
         if (updateError) throw new Error(updateError.message);
   
@@ -214,31 +226,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Editable Fields */}
-      <TextInput
-        style={[styles.input, profileState === "EDIT" && styles.editable]}
-        value={user.name}
-        onChangeText={(text) => handleChange("name", text)}
-        editable={profileState === "EDIT"}
-        placeholder="Full Name"
-      />
-
-      <TextInput
-        style={[styles.input, profileState === "EDIT" && styles.editable]}
-        value={user.dob}
-        onChangeText={(text) => handleChange("dob", text)}
-        editable={profileState === "EDIT"}
-        placeholder="Date of Birth"
-      />
-
-      <TextInput
-        style={[styles.input, profileState === "EDIT" && styles.editable]}
-        value={user.phone}
-        onChangeText={(text) => handleChange("phone", text)}
-        editable={profileState === "EDIT"}
-        placeholder="Phone"
-      />
-
       {/* Toggle between View and Edit Mode */}
       {profileState === "VIEW" ? (
         <TouchableOpacity
@@ -252,6 +239,108 @@ export default function ProfileScreen() {
           <Text style={styles.saveText}>Save Changes</Text>
         </TouchableOpacity>
       )}
+      {/* Profile Image */}
+      <View style={styles.profileContainer}>
+        <Image
+          source={{ uri: "https://i.imgur.com/4u1lxaA.png" }}
+          style={styles.profileImage}
+        />
+        <TouchableOpacity
+          style={styles.editIcon}
+          onPress={() => setIsEditing(!isEditing)}
+        >
+          <Ionicons
+            name={isEditing ? "checkmark-circle" : "pencil"}
+            size={22}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* User Name */}
+      <TextInput
+        style={[styles.name, isEditing && styles.editable]}
+        value={user.name}
+        onChangeText={(text) => handleChange("name", text)}
+        editable={isEditing}
+      />
+
+      {/* Editable Fields */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={[styles.input, isEditing && styles.editable]}
+          value={user.email}
+          onChangeText={(text) => handleChange("email", text)}
+          editable={isEditing}
+          keyboardType="email-address"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Date of Birth</Text>
+        <View style={[styles.inputWithIcon, isEditing && styles.editable]}>
+          <TextInput
+            style={[styles.inputField, { flex: 1 }]}
+            value={user.dob}
+            onChangeText={(text) => handleChange("dob", text)}
+            editable={isEditing}
+          />
+          <Ionicons
+            name="calendar-outline"
+            size={20}
+            color={isEditing ? "black" : "gray"}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Phone Number</Text>
+        <TextInput
+          style={[styles.input, isEditing && styles.editable]}
+          value={user.phone}
+          onChangeText={(text) => handleChange("phone", text)}
+          editable={isEditing}
+          keyboardType="phone-pad"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Password</Text>
+        <View style={[styles.inputWithIcon, isEditing && styles.editable]}>
+          <TextInput
+            style={[styles.inputField, { flex: 1 }]}
+            value={user.password}
+            secureTextEntry={!passwordVisible}
+            editable={isEditing}
+            onChangeText={(text) => handleChange("password", text)}
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          >
+            <Ionicons
+              name={passwordVisible ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={isEditing ? "black" : "gray"}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Save Button */}
+      {isEditing && (
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => setIsEditing(false)}
+        >
+          <Text style={styles.saveText}>Save Changes</Text>
+        </TouchableOpacity>
+      )}
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -292,6 +381,31 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   input: {
+    bottom: 30,
+    left: 45,
+    backgroundColor: "#16A849",
+    borderRadius: 20,
+    padding: 6,
+    elevation: 3, // Adds slight shadow
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  inputContainer: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 14,
+    color: "gray",
+    marginBottom: 5,
+  },
+  inputWithIcon: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
@@ -301,6 +415,8 @@ const styles = StyleSheet.create({
   editable: {
     borderColor: "#16A849",
     borderWidth: 2,
+    backgroundColor: "#F8F8F8",
+    paddingHorizontal: 5,
   },
   editButton: {
     backgroundColor: "gray",
@@ -308,8 +424,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
+  inputField: {
+    fontSize: 16,
+  },
   saveButton: {
+    marginTop: 20,
     backgroundColor: "blue",
+    justifyContent: "space-between",
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -320,6 +441,19 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: "white",
+    fontWeight: "bold",
+  },
+  logoutButton: {
+    marginTop: 20,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "red",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  logoutText: {
+    color: "red",
     fontWeight: "bold",
   },
 });
