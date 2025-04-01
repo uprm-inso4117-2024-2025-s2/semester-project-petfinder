@@ -5,9 +5,7 @@ import PetMarker from '../../components/ui/PetMarker';
 import PetDetailsModal from '../../components/ui/PetDetailsModal';
 import usePetReports from '../../hooks/usePetReports';
 
-// Verify that the MapMarker renders correctly on the map
 // This component should display a pet's location using coordinates passed as props
-
 const MapScreen = () => {
   // Track the selected pet to display in the modal
   const [selectedPet, setSelectedPet] = useState(null);
