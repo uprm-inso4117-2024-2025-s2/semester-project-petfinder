@@ -25,7 +25,6 @@ describe("👤 Supabase API - Users Table Tests", () => {
       password_hash: "yurrrrrrrrr"
     };
 
-    console.log("🟢 API URL:", `${API_URL}/users`);
     console.log("🟢 Request Headers:", HEADERS);
     console.log("🟢 Request Body:", newUser);
 
