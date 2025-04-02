@@ -1,10 +1,10 @@
-corrected_workflow = """name: k6 Cloud Performance Test
+name: k6 Cloud Performance Test
 
 on:
-  workflow_dispatch:  
+  workflow_dispatch:  # Manual trigger
   push:
     branches:
-      - performance-testing-k6  
+      - performance-testing-k6  # or your branch name
 
 jobs:
   k6-test:
@@ -29,10 +29,3 @@ jobs:
         with:
           name: k6-test-results
           path: k6-results/results.json
-"""
-
-corrected_workflow_path = "/mnt/data/k6-cloud-test-fixed.yml"
-with open(corrected_workflow_path, "w") as f:
-    f.write(corrected_workflow)
-
-corrected_workflow_path
