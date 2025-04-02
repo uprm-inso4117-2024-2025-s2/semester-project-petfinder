@@ -1,6 +1,10 @@
 # Milestone Data
 
+<<<<<<< HEAD
 ## Date Generated: 2025-04-01
+=======
+## Date Generated: 2025-04-02
+>>>>>>> origin/inso-metrics
 | Developer | Points Closed | Percent Contribution | Projected Grade | Lecture Topic Tasks |
 | --------- | ------------- | -------------------- | --------------- | ------------------- |
 | PedroRodz | 74.5 | 5.0% | 100.0% | 1 |
@@ -59,6 +63,7 @@
 
 | Developer | Week #1 | Week #2 | Week #3 | Week #4 | Penalty |
 |---|---|---|---|---|---|
+<<<<<<< HEAD
 | Jjulianirizarry24 | Yes | Yes | Yes | Yes | 0.0 |
 | LightPolution | Yes | Yes | Yes | No | 2.0 |
 | Alejandro-DeJesus | Yes | Yes | Yes | Yes | 0.0 |
@@ -110,6 +115,59 @@
 | AlexisTraversoPR | 32.6% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 67.4% | 53.5% | 100.0% | 0.0% | 53.5% |
 | frances-sepulveda | 19.9% | 0.0% | 31.5% | 11.2% | 0.0% | 68.5% | 84.1% | 0.0% | 100.0% | 0.0% | 0.0% |
 | kevin-d-lopez | 19.7% | 0.0% | 19.7% | 0.0% | 0.0% | 0.0% | 59.7% | 40.0% | 100.0% | 0.0% | 80.3% |
+=======
+| JoshDG03 | No | Yes | Yes | Yes | 2.0 |
+| JaseyAcevedo | Yes | Yes | Yes | Yes | 0.0 |
+| kevin-d-lopez | No | Yes | Yes | Yes | 2.0 |
+| diegxarmandx | Yes | Yes | Yes | Yes | 0.0 |
+| Gian-Go | Yes | Yes | Yes | Yes | 0.0 |
+| Alejandro-DeJesus | Yes | Yes | Yes | Yes | 0.0 |
+| KevinIbarra1 | Yes | Yes | No | Yes | 2.0 |
+| NathBat09 | Yes | Yes | Yes | Yes | 0.0 |
+| rukitoyordan | No | Yes | Yes | Yes | 2.0 |
+| Adriana-Isabel | Yes | Yes | Yes | Yes | 0.0 |
+| GiovanniMaysonet | Yes | Yes | Yes | Yes | 0.0 |
+| AlexisTraversoPR | Yes | Yes | Yes | Yes | 0.0 |
+| frances-sepulveda | Yes | No | Yes | Yes | 2.0 |
+| johnsantiago9 | Yes | Yes | Yes | No | 2.0 |
+| dylanDeJesus21 | Yes | Yes | Yes | Yes | 0.0 |
+| Jafet160 | Yes | Yes | Yes | No | 2.0 |
+| rafa-quiles | Yes | Yes | Yes | Yes | 0.0 |
+| LightPolution | Yes | Yes | Yes | No | 2.0 |
+| PedroRodz | Yes | Yes | Yes | Yes | 0.0 |
+| Jjulianirizarry24 | Yes | Yes | Yes | Yes | 0.0 |
+| Yahid1 | Yes | Yes | Yes | Yes | 0.0 |
+| JuanIranzo | Yes | Yes | Yes | Yes | 0.0 |
+| Andy3017 | Yes | Yes | Yes | Yes | 0.0 |
+| diegorobles2 | Yes | Yes | Yes | Yes | 0.0 |
+
+## Point Percent by Label
+
+| Developer | TL Approved | Completed | Good First Issue | Documentation | Interactive Map Team | Pending Approval | Backend and Infrastructure Team | User-to-User Interactions Team | All Teams | Approved | User Profile / Authentication Team |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| PedroRodz | 31.9% | 51.0% | 0.0% | 19.1% | 80.9% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| JaseyAcevedo | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| Jafet160 | 100.0% | 41.2% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| JuanIranzo | 44.7% | 100.0% | 0.0% | 28.9% | 71.1% | 9.6% | 0.0% | 0.0% | 28.9% | 100.0% | 0.0% |
+| diegxarmandx | 39.9% | 64.3% | 0.0% | 24.5% | 0.0% | 20.3% | 39.9% | 0.0% | 60.1% | 79.7% | 0.0% |
+| Andy3017 | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| Yahid1 | 56.6% | 100.0% | 0.0% | 43.4% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| NathBat09 | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 100.0% | 0.0% |
+| Adriana-Isabel | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 82.2% | 0.0% |
+| GiovanniMaysonet | 50.1% | 50.1% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 50.1% | 49.9% | 100.0% | 0.0% |
+| dylanDeJesus21 | 58.7% | 41.3% | 0.0% | 12.4% | 87.6% | 41.3% | 0.0% | 0.0% | 12.4% | 100.0% | 0.0% |
+| LightPolution | 0.0% | 100.0% | 0.0% | 62.9% | 37.1% | 0.0% | 0.0% | 0.0% | 29.1% | 100.0% | 0.0% |
+| diegorobles2 | 56.3% | 100.0% | 0.0% | 0.0% | 0.0% | 20.2% | 0.0% | 0.0% | 0.0% | 56.3% | 100.0% |
+| Gian-Go | 77.3% | 77.3% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 100.0% |
+| KevinIbarra1 | 27.6% | 36.2% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 100.0% |
+| rukitoyordan | 0.0% | 58.3% | 11.1% | 31.3% | 0.0% | 0.0% | 0.0% | 0.0% | 19.8% | 100.0% | 68.7% |
+| Alejandro-DeJesus | 7.1% | 44.4% | 0.0% | 37.4% | 0.0% | 0.0% | 0.0% | 62.6% | 0.0% | 100.0% | 0.0% |
+| JoshDG03 | 100.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 100.0% | 0.0% |
+| rafa-quiles | 0.0% | 50.5% | 0.0% | 50.5% | 0.0% | 0.0% | 0.0% | 0.0% | 81.4% | 100.0% | 0.0% |
+| AlexisTraversoPR | 53.5% | 67.4% | 0.0% | 0.0% | 0.0% | 0.0% | 53.5% | 0.0% | 32.6% | 100.0% | 0.0% |
+| frances-sepulveda | 0.0% | 84.1% | 11.2% | 31.5% | 0.0% | 0.0% | 0.0% | 0.0% | 19.9% | 100.0% | 68.5% |
+| kevin-d-lopez | 40.0% | 59.7% | 0.0% | 19.7% | 0.0% | 0.0% | 80.3% | 0.0% | 19.7% | 100.0% | 0.0% |
+>>>>>>> origin/inso-metrics
 # Metrics Generation Logs
 
 | Message |
