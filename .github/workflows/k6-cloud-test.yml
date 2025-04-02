@@ -1,11 +1,10 @@
-
-workflow_content = """name: k6 Cloud Performance Test
+corrected_workflow = """name: k6 Cloud Performance Test
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:  
   push:
     branches:
-      - performance-testing-k6 
+      - performance-testing-k6  
 
 jobs:
   k6-test:
@@ -24,7 +23,6 @@ jobs:
         run: |
           mkdir -p k6-results
           k6 run tests/k6Test.js --out json=k6-results/results.json
-        continue-on-error: true
 
       - name: Upload test result as artifact
         uses: actions/upload-artifact@v4
@@ -33,8 +31,8 @@ jobs:
           path: k6-results/results.json
 """
 
-workflow_path = "/mnt/data/k6-cloud-test.yml"
-with open(workflow_path, "w") as f:
-    f.write(workflow_content)
+corrected_workflow_path = "/mnt/data/k6-cloud-test-fixed.yml"
+with open(corrected_workflow_path, "w") as f:
+    f.write(corrected_workflow)
 
-workflow_path
+corrected_workflow_path
