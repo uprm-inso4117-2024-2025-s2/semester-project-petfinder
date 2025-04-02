@@ -1,0 +1,40 @@
+
+workflow_content = """name: k6 Cloud Performance Test
+
+on:
+  workflow_dispatch: 
+  push:
+    branches:
+      - performance-testing-k6 
+
+jobs:
+  k6-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run k6 test
+        uses: grafana/k6-action@v0.2.0
+        with:
+          filename: tests/k6Test.js
+
+      - name: Save k6 summary results
+        run: |
+          mkdir -p k6-results
+          k6 run tests/k6Test.js --out json=k6-results/results.json
+        continue-on-error: true
+
+      - name: Upload test result as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-test-results
+          path: k6-results/results.json
+"""
+
+workflow_path = "/mnt/data/k6-cloud-test.yml"
+with open(workflow_path, "w") as f:
+    f.write(workflow_content)
+
+workflow_path
