@@ -1,6 +1,14 @@
 # Milestone Data
 
+<<<<<<< HEAD
 ## Date Generated: 2025-04-02
+=======
+<<<<<<< HEAD
+## Date Generated: 2025-04-01
+=======
+## Date Generated: 2025-04-02
+>>>>>>> origin/inso-metrics
+>>>>>>> Testing&Debugging
 | Developer | Points Closed | Percent Contribution | Projected Grade | Lecture Topic Tasks |
 | --------- | ------------- | -------------------- | --------------- | ------------------- |
 | PedroRodz | 0.0 | 0.0% | 0.0% | 0 |
@@ -59,6 +67,7 @@
 
 | Developer | Week #1 | Week #2 | Week #3 | Week #4 | Week #5 | Week #6 | Penalty |
 |---|---|---|---|---|---|---|---|
+<<<<<<< HEAD
 | JoshDG03 | Yes | No | No | No | No | No | 20.0 |
 | JaseyAcevedo | Yes | No | No | No | No | No | 20.0 |
 | kevin-d-lopez | Yes | No | No | No | No | No | 20.0 |
@@ -74,6 +83,49 @@
 | frances-sepulveda | No | No | No | No | No | No | 27.0 |
 | johnsantiago9 | Yes | No | No | No | No | No | 20.0 |
 | dylanDeJesus21 | No | No | No | No | No | No | 27.0 |
+=======
+<<<<<<< HEAD
+| Jjulianirizarry24 | Yes | No | No | No | No | No | 20.0 |
+| LightPolution | Yes | No | No | No | No | No | 20.0 |
+| Alejandro-DeJesus | Yes | No | No | No | No | No | 20.0 |
+| JaseyAcevedo | Yes | No | No | No | No | No | 20.0 |
+| Andy3017 | Yes | No | No | No | No | No | 20.0 |
+| rafa-quiles | Yes | No | No | No | No | No | 20.0 |
+| frances-sepulveda | No | No | No | No | No | No | 27.0 |
+| Adriana-Isabel | Yes | No | No | No | No | No | 20.0 |
+| diegorobles2 | Yes | No | No | No | No | No | 20.0 |
+| Gian-Go | Yes | No | No | No | No | No | 20.0 |
+| JuanIranzo | Yes | No | No | No | No | No | 20.0 |
+| Yahid1 | Yes | No | No | No | No | No | 20.0 |
+| PedroRodz | Yes | No | No | No | No | No | 20.0 |
+| JoshDG03 | Yes | No | No | No | No | No | 20.0 |
+| GiovanniMaysonet | Yes | No | No | No | No | No | 20.0 |
+| NathBat09 | Yes | No | No | No | No | No | 20.0 |
+| johnsantiago9 | Yes | No | No | No | No | No | 20.0 |
+| diegxarmandx | Yes | No | No | No | No | No | 20.0 |
+| dylanDeJesus21 | No | No | No | No | No | No | 27.0 |
+| rukitoyordan | Yes | No | No | No | No | No | 20.0 |
+| KevinIbarra1 | Yes | No | No | No | No | No | 20.0 |
+| kevin-d-lopez | Yes | No | No | No | No | No | 20.0 |
+| Jafet160 | Yes | No | No | No | No | No | 20.0 |
+| AlexisTraversoPR | Yes | No | No | No | No | No | 20.0 |
+=======
+| JoshDG03 | Yes | No | No | No | No | No | 20.0 |
+| JaseyAcevedo | Yes | No | No | No | No | No | 20.0 |
+| kevin-d-lopez | Yes | No | No | No | No | No | 20.0 |
+| diegxarmandx | Yes | No | No | No | No | No | 20.0 |
+| Gian-Go | Yes | No | No | No | No | No | 20.0 |
+| Alejandro-DeJesus | Yes | No | No | No | No | No | 20.0 |
+| KevinIbarra1 | Yes | No | No | No | No | No | 20.0 |
+| NathBat09 | Yes | No | No | No | No | No | 20.0 |
+| rukitoyordan | Yes | No | No | No | No | No | 20.0 |
+| Adriana-Isabel | Yes | No | No | No | No | No | 20.0 |
+| GiovanniMaysonet | Yes | No | No | No | No | No | 20.0 |
+| AlexisTraversoPR | Yes | No | No | No | No | No | 20.0 |
+| frances-sepulveda | No | No | No | No | No | No | 27.0 |
+| johnsantiago9 | Yes | No | No | No | No | No | 20.0 |
+| dylanDeJesus21 | No | No | No | No | No | No | 27.0 |
+>>>>>>> Testing&Debugging
 | Jafet160 | Yes | No | No | No | No | No | 20.0 |
 | rafa-quiles | Yes | No | No | No | No | No | 20.0 |
 | LightPolution | Yes | No | No | No | No | No | 20.0 |
@@ -83,6 +135,10 @@
 | JuanIranzo | Yes | No | No | No | No | No | 20.0 |
 | Andy3017 | Yes | No | No | No | No | No | 20.0 |
 | diegorobles2 | Yes | No | No | No | No | No | 20.0 |
+<<<<<<< HEAD
+=======
+>>>>>>> origin/inso-metrics
+>>>>>>> Testing&Debugging
 
 ## Point Percent by Label
 

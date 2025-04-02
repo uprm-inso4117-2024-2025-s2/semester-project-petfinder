@@ -1,5 +1,8 @@
 import { StyleSheet, Image, Platform } from 'react-native';
 
+import { Alert, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -8,6 +11,34 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 export default function TabTwoScreen() {
+  const [locationStatus, setLocationStatus] = useState<string | null>(null); // State to store location status
+
+  // Handle Location Permission and GPS OFF cases
+  useEffect(() => {
+    const checkLocationPermission = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setLocationStatus("Permission Denied");
+        Alert.alert(
+          "Location Permission Required",
+          "Please enable location permissions in your settings to use location features."
+        );
+        return;
+      }
+      const servicesEnabled = await Location.hasServicesEnabledAsync();
+      if (!servicesEnabled) {
+        setLocationStatus("Services OFF");
+        Alert.alert(
+          "Location Services OFF",
+          "Please turn on GPS/location services for the app"
+        );
+        return;
+      }
+      setLocationStatus("Granted");
+    };
+    checkLocationPermission();
+  }, []);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
