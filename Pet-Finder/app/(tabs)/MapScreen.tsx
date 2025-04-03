@@ -46,7 +46,7 @@ const InitialData: Pet[] = [
  * @param selectedFilter - The type of pet filter selected.
  * @returns The filtered list of pets matching the criteria.
  */
-function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
+export function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
   return pets.filter(pet =>
     (selectedFilter === "" || pet.type.includes(selectedFilter)) &&
     (searchQuery === "" || pet.name.includes(searchQuery))
@@ -129,6 +129,7 @@ export default function MapScreen() {
             key={pet.id}
             coordinate={pet.location}
             image={pet.type === 'Dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+            testID={`marker-${pet.id}`}
           >
             <Callout>
               <Descriptor {...pet} />
