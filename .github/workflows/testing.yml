@@ -1,17 +1,29 @@
- name: CI
+name: CI
 
- on:
-   push:
-     branches:
-       - main
+on:
+  push:
+    branches:
+      - main
+  pull_request:  # Add this to run on PRs too
 
- jobs:
-   build:
-     runs-on: ubuntu-latest
-
-     steps:
-       - name: Get Your Code
-         uses: actions/checkout@v2
-
-       - name: Say Hello to the World
-         run: echo "Hello, World!"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Updated to v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Or your preferred version
+          cache: 'npm'  # Cache dependencies for faster runs
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run unit tests
+        run: npm test  # Your regular test suite
+        
+        
