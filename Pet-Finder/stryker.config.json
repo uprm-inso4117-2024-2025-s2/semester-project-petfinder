@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "jest",
+  "coverageAnalysis": "perTest",
+  "jest": {
+    "projectType": "custom"
+  },
+  "mutate": ["filterData.js"]
+}
