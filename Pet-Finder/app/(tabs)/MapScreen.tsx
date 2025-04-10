@@ -4,7 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
-import supabase from '../../../src/config/supabaseClient.js';
+import { supabase } from '../../utils/supabase';
 
 /**
  * Interface representing a pet object.
@@ -47,12 +47,12 @@ const InitialData: Pet[] = [
  * @param selectedFilter - The type of pet filter selected.
  * @returns The filtered list of pets matching the criteria.
  */
-function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
-  return pets.filter(pet =>
-    (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
-    (searchQuery === "" || pet.name.includes(searchQuery))
-  );
-}
+// function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
+//   return pets.filter(pet =>
+//     (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
+//     (searchQuery === "" || pet.name.includes(searchQuery))
+//   );
+// }
 
 /**
  * Styles for various UI components.
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 export default function MapScreen() {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [data, setData] = useState<Pet[]>([]);
+  const [dataActual, setData] = useState<Pet[]>([]);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   let locationSubscription: Location.LocationSubscription | null = null;
 
@@ -108,17 +108,19 @@ export default function MapScreen() {
         const { data, error: dbError, status } = await supabase
           .from('pets') // Your table name
           .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .limit(1);
            // Optional: order results
 
         if (dbError) {
           // Throw the error to be caught by the catch block
           throw dbError;
         }
+        console.log(data);
 
-        if (data) {
-          // Set the fetched data into state
-          setData(data);
-        }
+        // if (data) {
+        //   // Set the fetched data into state
+        //   setData(data);
+        // }
 
       } catch (err: any) {
         console.error('Error fetching items:', err);
@@ -126,10 +128,9 @@ export default function MapScreen() {
         Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
       }
     };
+    setData(InitialData);
 
     fetchItems();
-
-    // setData(filterData(InitialData, searchQuery, selectedFilter));
   }, [selectedFilter, searchQuery]);
 
   return (
@@ -155,11 +156,11 @@ export default function MapScreen() {
 
       {/* Map View with Pet Markers */}
       <MapView initialRegion={INITIAL_REGION} showsUserLocation style={styles.map}>
-        {data.map((pet: Pet) => (
+        {dataActual.map((pet: Pet) => (
           <Marker
             key={pet.id}
             coordinate={{latitude : pet.latitude ,  longitude: pet.longitude}}
-            image={pet.species === 'Dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+            image={pet.species === 'dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
           >
             <Callout>
               <Descriptor {...pet} />
