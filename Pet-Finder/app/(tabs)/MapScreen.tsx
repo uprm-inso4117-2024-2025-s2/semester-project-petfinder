@@ -1,9 +1,10 @@
-import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Callout } from 'react-native-maps';
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
+import supabase from '../../../src/config/supabaseClient.js';
 
 /**
  * Interface representing a pet object.
@@ -11,12 +12,12 @@ import Descriptor from "@/components/descriptor";
 interface Pet {
   id: number;
   name: string;
-  type: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-  photo: any;
+  species: string;
+  
+  latitude: number;
+  longitude: number;
+  
+  photo_url: any;
   description: string;
 }
 
@@ -34,9 +35,9 @@ const INITIAL_REGION = {
  * Initial dataset of pets available for display.
  */
 const InitialData: Pet[] = [
-  { id: 1, name: "Henry", type: "Dog", location: { latitude: 18.209533, longitude: -67.140849 }, photo: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
-  { id: 2, name: "Jose", type: "Dog", location: { latitude: 18.219533, longitude: -67.140849 }, photo: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
-  { id: 3, name: "Lara", type: "Cat", location: { latitude: 18.219633, longitude: -67.141749 }, photo: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
+  { id: 1, name: "Henry", species: "Dog", latitude: 18.209533, longitude: -67.140849, photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
+  { id: 2, name: "Jose", species: "Dog", latitude: 18.219533, longitude: -67.140849 , photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
+  { id: 3, name: "Lara", species: "Cat", latitude: 18.219633, longitude: -67.141749 , photo_url: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
 ];
 
 /**
@@ -48,7 +49,7 @@ const InitialData: Pet[] = [
  */
 function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
   return pets.filter(pet =>
-    (selectedFilter === "" || pet.type.includes(selectedFilter)) &&
+    (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
     (searchQuery === "" || pet.name.includes(searchQuery))
   );
 }
@@ -98,7 +99,37 @@ export default function MapScreen() {
    * Effect hook to filter pets based on search query and selected filter.
    */
   useEffect(() => {
-    setData(filterData(InitialData, searchQuery, selectedFilter));
+    const fetchItems = async () => {
+
+      try {
+        // Perform the Supabase query
+        // Replace 'items' with your actual table name
+        // Select specific columns or '*' for all
+        const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+           // Optional: order results
+
+        if (dbError) {
+          // Throw the error to be caught by the catch block
+          throw dbError;
+        }
+
+        if (data) {
+          // Set the fetched data into state
+          setData(data);
+        }
+
+      } catch (err: any) {
+        console.error('Error fetching items:', err);
+        
+        Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
+      }
+    };
+
+    fetchItems();
+
+    // setData(filterData(InitialData, searchQuery, selectedFilter));
   }, [selectedFilter, searchQuery]);
 
   return (
@@ -127,8 +158,8 @@ export default function MapScreen() {
         {data.map((pet: Pet) => (
           <Marker
             key={pet.id}
-            coordinate={pet.location}
-            image={pet.type === 'Dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+            coordinate={{latitude : pet.latitude ,  longitude: pet.longitude}}
+            image={pet.species === 'Dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
           >
             <Callout>
               <Descriptor {...pet} />

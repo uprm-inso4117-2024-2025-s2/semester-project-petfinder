@@ -56,7 +56,7 @@ export default function Descriptor(Data: Pet){
 
     return (
         <View style={styles.card}>
-          <Image source={Data.photo} style={styles.image} />
+          <Image source={Data.photo_url} style={styles.image} />
           <Text style={styles.name}>{Data.name}</Text>
           <Text style={styles.description}>{Data.description}</Text>
           <CalloutSubview onPress={() => handleReport("Pet reported as found!")}>
