@@ -35,9 +35,9 @@ const INITIAL_REGION = {
  * Initial dataset of pets available for display.
  */
 const InitialData: Pet[] = [
-  { id: 1, name: "Henry", species: "Dog", latitude: 18.209533, longitude: -67.140849, photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
-  { id: 2, name: "Jose", species: "Dog", latitude: 18.219533, longitude: -67.140849 , photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
-  { id: 3, name: "Lara", species: "Cat", latitude: 18.219633, longitude: -67.141749 , photo_url: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
+  { id: 1, name: "Henry", species: "dog", latitude: 18.209533, longitude: -67.140849, photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
+  { id: 2, name: "Jose", species: "dog", latitude: 18.219533, longitude: -67.140849 , photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
+  { id: 3, name: "Lara", species: "cat", latitude: 18.219633, longitude: -67.141749 , photo_url: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
 ];
 
 /**
