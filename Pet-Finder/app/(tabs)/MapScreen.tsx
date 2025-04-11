@@ -31,14 +31,6 @@ const INITIAL_REGION = {
   longitudeDelta: 0.02421
 };
 
-/**
- * Initial dataset of pets available for display.
- */
-const InitialData: Pet[] = [
-  { id: 1, name: "Henry", species: "dog", latitude: 18.209533, longitude: -67.140849, photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
-  { id: 2, name: "Jose", species: "dog", latitude: 18.219533, longitude: -67.140849 , photo_url: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
-  { id: 3, name: "Lara", species: "cat", latitude: 18.219633, longitude: -67.141749 , photo_url: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
-];
 
 /**
  * Filters the list of pets based on a search query and a selected type filter.
@@ -47,12 +39,6 @@ const InitialData: Pet[] = [
  * @param selectedFilter - The type of pet filter selected.
  * @returns The filtered list of pets matching the criteria.
  */
-// function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
-//   return pets.filter(pet =>
-//     (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
-//     (searchQuery === "" || pet.name.includes(searchQuery))
-//   );
-// }
 
 /**
  * Styles for various UI components.
@@ -100,27 +86,96 @@ export default function MapScreen() {
    */
   useEffect(() => {
     const fetchItems = async () => {
-
+      
       try {
-        // Perform the Supabase query
-        // Replace 'items' with your actual table name
-        // Select specific columns or '*' for all
-        const { data, error: dbError, status } = await supabase
+        if(selectedFilter != "" && searchQuery != ""){
+          const { data, error: dbError, status } = await supabase
           .from('pets') // Your table name
           .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
-          .limit(1);
-           // Optional: order results
+          .eq('species',selectedFilter.toLowerCase())
+          .ilike('name', '%'+searchQuery+'%')
+          .order('created_at', {ascending: false})
+          .limit(3);
 
-        if (dbError) {
-          // Throw the error to be caught by the catch block
-          throw dbError;
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
         }
-        console.log(data);
+        
+        if(selectedFilter == "" && searchQuery == ""){
 
-        // if (data) {
-        //   // Set the fetched data into state
-        //   setData(data);
-        // }
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+          console.log("Both are empty")
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+
+        }
+
+        if(selectedFilter != "" && searchQuery == ""){
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .eq('species',selectedFilter.toLowerCase())
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+        }
+
+        if(selectedFilter == "" && searchQuery != ""){
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .ilike('name', '%'+searchQuery+'%')
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+        }
+
+      
+        
 
       } catch (err: any) {
         console.error('Error fetching items:', err);
@@ -128,7 +183,8 @@ export default function MapScreen() {
         Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
       }
     };
-    setData(InitialData);
+    console.log(searchQuery)
+    console.log(selectedFilter)
 
     fetchItems();
   }, [selectedFilter, searchQuery]);
