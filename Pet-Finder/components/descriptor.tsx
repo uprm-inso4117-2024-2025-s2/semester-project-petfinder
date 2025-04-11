@@ -51,12 +51,20 @@ export default function Descriptor(Data: Pet){
 
         console.log(Message)
     }
+
+    const petImages: Record<string, any> = {
+      'dog': require('../assets/images/Pet_Finder_Assets/dog.png'),
+      'cat': require('../assets/images/Pet_Finder_Assets/cat.png'),
+    };
+    const Photo = petImages[Data.species] ?? require('../assets/images/Pet_Finder_Assets/dog.png');
+
+    
     
     
 
     return (
         <View style={styles.card}>
-          <Image source={Data.photo} style={styles.image} />
+          <Image source={Photo} style={styles.image} />
           <Text style={styles.name}>{Data.name}</Text>
           <Text style={styles.description}>{Data.description}</Text>
           <CalloutSubview onPress={() => handleReport("Pet reported as found!")}>
