@@ -14,7 +14,7 @@ export default function LandingPage() {
                     <TouchableOpacity onPress={() => router.push("/LoginScreen")} style={styles.headerButton}>
                         <Text style={styles.headerButtonText}>Log In</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push("/LoginScreen")} style={styles.headerButton}>
+                    <TouchableOpacity onPress={() => router.push("/SignUp")} style={styles.headerButton}>
                         <Text style={styles.headerButtonText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
@@ -43,9 +43,45 @@ export default function LandingPage() {
                 </View>
 
                 {/* Success Stories */}
-                {/* <View style={styles.additionalContent}>
-                    <Text style={styles.additionalText}>Happy Reunions! </Text>
-                </View> */}
+                <View style={styles.successStories}>
+                    <Text style={styles.successTitle}>Happy Reunions!</Text>
+
+                    <View style={styles.storyCard}>
+                        <Text style={styles.storyText}>
+                            "After a week of searching, we found Luna through Pet Finder. Thank you for giving us hope!" 
+                            - María from Bayamón
+                        </Text>
+                    </View>
+
+                    <View style={styles.storyCard}>
+                        <Text style={styles.storyText}>
+                            "We thought Max was gone forever... but someone spotted him and pinned his location! We're so grateful to be able to find him!" 
+                            - José & Carla
+                        </Text>
+                    </View>
+
+                    <View style={styles.storyCard}>
+                        <Text style={styles.storyText}>
+                            "We were devastated when Coco ran off during a storm. Thanks to this app, a kind stranger found her!" 
+                            - Luis from Ponce
+                        </Text>
+                    </View>
+
+                    <View style={styles.storyCard}>
+                        <Text style={styles.storyText}>
+                            "I never imagined finding Toby again, but Pet Finder made the impossible happen. Forever grateful!" 
+                            - Gabriela R.
+                        </Text>
+                    </View>
+
+                    <View style={styles.storyCard}>
+                        <Text style={styles.storyText}>
+                            "Bruno was missing for 3 days, but someone posted his picture and we were able to contact them. This app works miracles!" 
+                            - The Santiago Family
+                        </Text>
+                    </View>
+                </View>
+
 
                 {/* Footer inside ScrollView */}
                 <View style={styles.footer}>
@@ -176,5 +212,35 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         paddingBottom: 100, // Add extra space at the bottom to avoid covering by bottom navigation menu
-    }
+    },
+    successStories: {
+        marginTop: 30,
+        padding: 15,
+        backgroundColor: "#e8d8c4",
+        borderRadius: 10,
+        alignItems: "center",
+    },
+    successTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+    storyCard: {
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 10,
+        width: "100%",
+        elevation: 2,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+    },
+    storyText: {
+        fontSize: 14,
+        color: "#333",
+        fontStyle: "italic",
+    },
+    
 });
