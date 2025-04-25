@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
+import { useAuth } from '../../context/AuthContext'; // Add this import
 
 // Import the placeholder image
 import ProfileImagePlaceholder from "../../assets/images/profileImageplaceholder.jpeg"; // Adjust the path as needed
@@ -19,6 +20,7 @@ export default function ProfileScreen() {
   const [isEditing, setIsEditing] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null); // No image initially
+  const { isLoggedIn, logout } = useAuth(); // Get auth state and logout function
 
   const [user, setUser] = useState({
     name: "Student Name",
@@ -52,6 +54,12 @@ export default function ProfileScreen() {
       setProfileImage(result.assets[0].uri);
     }
   };
+
+
+  // Redirect if not logged in
+  if (!isLoggedIn) {
+    return <Redirect href="/LoginScreen" />;
+  }
 
   return (
     <View style={styles.container}>

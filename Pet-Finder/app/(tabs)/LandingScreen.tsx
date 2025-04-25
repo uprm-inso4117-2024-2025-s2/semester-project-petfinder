@@ -9,7 +9,7 @@ export default function LandingPage() {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <Image source={require('@/assets/images/pet_finder_logo_middle.jpeg')} style={styles.headerImage} />
+                <Image source={require('../../assets/images/pet_finder_logo_middle.jpeg')} style={styles.headerImage} />
                 <View style={styles.headerButtons}>
                     <TouchableOpacity onPress={() => router.push("/LoginScreen")} style={styles.headerButton}>
                         <Text style={styles.headerButtonText}>Log In</Text>

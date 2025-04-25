@@ -1,150 +1,248 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../context/AuthContext";
+import { User } from "@supabase/supabase-js";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [requiresOtp, setRequiresOtp] = useState(false);
-  const [user, setUser] = useState<any>(null);
-    const [errorMessage, setErrorMessage] = useState(""); // 🔴 New State for Error Messages
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [otp, setOtp] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [requiresOtp, setRequiresOtp] = useState<boolean>(false);
+  const [tempUser, setTempUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   const router = useRouter();
+  const { login } = useAuth();
+
+  // Check if we already have a session on component mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (data?.session?.user && !error) {
+        login(data.session.user);
+        router.replace("/(tabs)/");
+      }
+    };
+    
+    checkSession();
+  }, []);
 
   const handleLogin = async () => {
-    setLoading(true);
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      Alert.alert("Login Failed", error.message);
-      setLoading(false);
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password");
       return;
     }
 
-    const { data: userData } = await supabase
-      .from("users")
-      .select("id, two_factor_enabled, two_factor_method")
-      .eq("id", data.user.id)
-      .single();
+    setLoading(true);
+    setErrorMessage("");
 
-    if (userData?.two_factor_enabled) {
-      setRequiresOtp(true);
-      setUser(userData);
-    } else {
-      router.replace("/(tabs)/");
+    try {
+      // Log the attempt
+      console.log(`Attempting to sign in user: ${email}`);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password
+      });
+
+      console.log("Sign in response:", data ? "Data received" : "No data", error ? `Error: ${error.message}` : "No error");
+
+      if (error) {
+        console.error("Full login error:", error);
+        if (error.message.includes("invalid")) {
+          setErrorMessage("Invalid email or password");
+        } else {
+          setErrorMessage(error.message);
+        }
+        return;
+      }
+
+      if (!data.user || !data.session) {
+        setErrorMessage("Login successful but no user data returned");
+        return;
+      }
+
+      // Check if 2FA is enabled
+      const twoFactorEnabled = data.user?.user_metadata?.two_factor_enabled === true;
+      console.log("2FA enabled:", twoFactorEnabled);
+
+      if (twoFactorEnabled) {
+        setRequiresOtp(true);
+        setTempUser(data.user);
+      } else {
+        // Direct login if no 2FA
+        await login(data.user);
+        router.replace("/(tabs)/");
+      }
+    } catch (error: any) {
+      console.error("Unexpected login error:", error);
+      setErrorMessage(error?.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const verifyOtp = async () => {
+    if (!otp) {
+      setErrorMessage("Please enter the OTP");
+      return;
+    }
+  
     setLoading(true);
-    const { data, error } = await supabase.rpc("validate_otp", {
-      user_id: user.id,
-      otp,
-    });
-
-    if (error) {
-      Alert.alert("Invalid OTP", error.message);
+    setErrorMessage("");
+  
+    try {
+      console.log(`Attempting to verify OTP for user ID: ${tempUser?.id}`);
+      
+      // Make sure the RPC exists in your Supabase project
+      const { data: otpData, error: otpError } = await supabase.rpc("validate_otp", {
+        user_id: tempUser?.id,
+        otp_code: otp, // Make sure parameter name matches your RPC function
+      });
+  
+      console.log("OTP validation response:", otpData, otpError);
+      
+      if (otpError) {
+        console.error("OTP validation error:", otpError);
+        setErrorMessage("Invalid OTP. Please try again.");
+        return;
+      }
+  
+      // After successful OTP validation, get a new session
+      const { data, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error after OTP:", sessionError);
+        setErrorMessage("Failed to get session after OTP verification");
+        return;
+      }
+  
+      if (data?.session?.user) {
+        await login(data.session.user);
+        router.replace("/(tabs)/");
+      } else {
+        setErrorMessage("Session expired. Please log in again.");
+        setRequiresOtp(false);
+      }
+    } catch (error: any) {
+      console.error("Full OTP error:", error);
+      setErrorMessage(error?.message || "OTP verification failed");
+    } finally {
       setLoading(false);
+    }
+  };
+
+  // Alternative simplified approach if your custom RPC doesn't work
+  const handleLoginWithoutOtp = async () => {
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password");
       return;
     }
 
-    router.replace("/(tabs)/");
-    setLoading(false);
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password
+      });
+
+      if (error) throw error;
+      
+      if (data.user && data.session) {
+        await login(data.user);
+        router.replace("/(tabs)/");
+      } else {
+        setErrorMessage("No user data returned");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      setErrorMessage(error?.message || "Failed to login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>Login</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
 
-      <TextInput
-        placeholder="Email"
-        style={{
-          width: "100%",
-          borderWidth: 1,
-          padding: 10,
-          marginBottom: 10,
-          borderRadius: 5,
-        }}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
-
-      <TextInput
-        placeholder="Password"
-        style={{
-          width: "100%",
-          borderWidth: 1,
-          padding: 10,
-          marginBottom: 10,
-          borderRadius: 5,
-        }}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      <TouchableOpacity
-        onPress={() => router.push("/(tabs)/reset")}
-        style={{ alignSelf: "flex-end", marginBottom: 15 }}
-      >
-        <Text style={{ color: "#3498db", textDecorationLine: "underline" }}>Forgot Password?</Text>
-      </TouchableOpacity>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
       {!requiresOtp ? (
-        <TouchableOpacity
-          onPress={handleLogin}
-          style={{
-            backgroundColor: "#3498db",
-            padding: 12,
-            borderRadius: 5,
-            width: "100%",
-            alignItems: "center",
-          }}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Login</Text>
-          )}
-        </TouchableOpacity>
-      ) : (
         <>
           <TextInput
-            placeholder="Enter OTP"
-            style={{
-              width: "100%",
-              borderWidth: 1,
-              padding: 10,
-              marginBottom: 10,
-              borderRadius: 5,
-            }}
-            keyboardType="numeric"
-            value={otp}
-            onChangeText={setOtp}
+            placeholder="Email"
+            style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={(text: string) => setEmail(text)}
           />
-
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry
+            value={password}
+            onChangeText={(text: string) => setPassword(text)}
+          />
           <TouchableOpacity
-            onPress={verifyOtp}
-            style={{
-              backgroundColor: "green",
-              padding: 12,
-              borderRadius: 5,
-              width: "100%",
-              alignItems: "center",
-            }}
+            onPress={() => router.push("/(tabs)/reset")}
+            style={styles.forgotPassword}
+          >
+            <Text style={styles.linkText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleLogin}
+            style={styles.loginButton}
+            disabled={loading}
           >
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={{ color: "#fff", fontWeight: "bold" }}>Verify OTP</Text>
+              <Text style={styles.loginButtonText}>Login</Text>
             )}
+          </TouchableOpacity>
+          
+          <View style={styles.signupContainer}>
+            <Text>Don't have an account? </Text>
+            <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
+              <Text style={styles.linkText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={styles.otpText}>
+            A one-time password has been sent to your authentication app.
+          </Text>
+          <TextInput
+            placeholder="Enter OTP"
+            style={styles.input}
+            keyboardType="numeric"
+            value={otp}
+            onChangeText={(text: string) => setOtp(text)}
+          />
+          <TouchableOpacity
+            onPress={verifyOtp}
+            style={styles.otpButton}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.loginButtonText}>Verify OTP</Text>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setRequiresOtp(false)}
+            style={styles.backButton}
+          >
+            <Text style={styles.backButtonText}>Back to Login</Text>
           </TouchableOpacity>
         </>
       )}
@@ -153,61 +251,83 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        padding: 20,
-        backgroundColor: "#ffffff",
-    },
-    appTitle: {
-        fontSize: 32,
-        fontWeight: "bold",
-        color: "#81C090",
-        textAlign: "center",
-        marginBottom: 10,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "#333333",
-        marginBottom: 10,
-        textAlign: "center",
-    },
-    subtitle: {
-        fontSize: 16,
-        color: "#666666",
-        marginBottom: 20,
-        textAlign: "center",
-    },
-    input: {
-        width: "100%",
-        height: 50,
-        borderColor: "#cccccc",
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 10,
-        marginBottom: 15,
-        fontSize: 16,
-        color: "#333333",
-    },
-    loginButton: {
-        backgroundColor: "#16A849",
-        padding: 15,
-        borderRadius: 8,
-        width: "100%",
-        alignItems: "center",
-        marginBottom: 20,
-    },
-    loginButtonText: {
-        color: "#ffffff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    errorText: {
-        color: "red", // 🔴 Makes Error Message Red
-        fontSize: 14,
-        textAlign: "center",
-        marginBottom: 10,
-    },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#ffffff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333333",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  input: {
+    width: "100%",
+    height: 50,
+    borderColor: "#cccccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    fontSize: 16,
+    color: "#333333",
+  },
+  forgotPassword: {
+    alignSelf: "flex-end",
+    marginBottom: 15,
+  },
+  linkText: {
+    color: "#3498db",
+    textDecorationLine: "underline",
+  },
+  loginButton: {
+    backgroundColor: "#16A849",
+    padding: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  otpButton: {
+    backgroundColor: "#16A849",
+    padding: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  backButton: {
+    padding: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+  },
+  backButtonText: {
+    color: "#3498db",
+    fontSize: 16,
+  },
+  loginButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  signupContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  otpText: {
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333333",
+  },
 });
-

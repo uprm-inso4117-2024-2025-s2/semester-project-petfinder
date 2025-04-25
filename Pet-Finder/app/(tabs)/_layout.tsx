@@ -1,6 +1,8 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
+import { AuthProvider } from '../../context/AuthContext'; // Add this import
+import { useAuth } from '../../context/AuthContext';
 
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
@@ -8,8 +10,19 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
-export default function TabLayout() {
+// New root layout wrapper
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <TabLayout />
+    </AuthProvider>
+  );
+}
+
+// Your existing tab layout (now nested component)
+function TabLayout() {
   const colorScheme = useColorScheme();
+  const { user, isLoggedIn } = useAuth(); // Get auth state
 
   return (
     <Tabs
@@ -20,7 +33,6 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
             position: "absolute",
           },
           default: {},
@@ -45,13 +57,18 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="profile"
+           <Tabs.Screen
+        name={isLoggedIn ? "profile" : "login"}
         options={{
-          title: "Profile",
+          title: isLoggedIn ? "Profile" : "Login",
+          href: isLoggedIn ? "profile" : "login",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="person.fill" color={color} />
-          ), // Fixed Icon
+            <IconSymbol
+              size={28}
+              name={isLoggedIn ? "person.fill" : "lock.fill"}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
