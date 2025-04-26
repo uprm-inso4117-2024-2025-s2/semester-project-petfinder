@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
+import { sortByDistance, sortByName } from "@/utils/sortUtils";
 
 /**
  * Interface representing a pet object.
@@ -98,7 +99,9 @@ export default function MapScreen() {
    * Effect hook to filter pets based on search query and selected filter.
    */
   useEffect(() => {
-    setData(filterData(InitialData, searchQuery, selectedFilter));
+    const filtered = filterData(InitialData, searchQuery, selectedFilter);
+    const sorted = selectedFilter === "Dog" ? sortByDistance(filtered) : sortByName(filtered);
+    setData(sorted);
   }, [selectedFilter, searchQuery]);
 
   return (
