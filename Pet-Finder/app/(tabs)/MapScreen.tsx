@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
 import { supabase } from '../../utils/supabase';
+import { sortByDistance, sortByName } from "@/utils/sortUtils";
 
 /**
  * Interface representing a pet object.
