@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@cucumber/cucumber": "^11.2.0",
     "@react-native-community/cli": "latest",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/jest-runner": "^8.7.1",
@@ -83,5 +84,20 @@
     "react-test-renderer": "18.3.1",
     "supertest": "^7.0.0",
     "typescript": "^5.3.3"
-  }
+  },
+  "description": "PetFinder is a mobile app specifically designed as a tool to assist pet owners in the case of their pets being lost. \r The main purpose of the application is to send an alert to every user within a requested radius of a lost pet, and \r to notify any user getting close to a reported area, along with providing all the required information to \r communicate with the owner in case of the pet being found.",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder/issues"
+  },
+  "homepage": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder#readme"
 }
