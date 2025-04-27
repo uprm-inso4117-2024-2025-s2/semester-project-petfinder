@@ -32,6 +32,39 @@ const INITIAL_REGION = {
   longitudeDelta: 0.02421
 };
 
+let startData = [] as Pet[]
+const fetchItems = async () => {
+  console.log("Fetching Initial");
+  try {
+    let query = supabase
+      .from('pets')
+      .select('id, name, species, latitude, longitude, photo_url, description')
+      .order('created_at', { ascending: false })
+      .limit(3); // Maybe increase limit? 3 seems very low.
+
+    // Apply filters conditionally
+    
+
+    const { data, error: dbError } = await query;
+
+    if (dbError) {
+      throw dbError;
+    }
+
+    console.log("Fetched Data:", data);
+    startData = data;
+
+    return 
+     // Set data or empty array if data is null/undefined
+
+  } catch (err: any) {
+    console.error('Error fetching items:', err);
+    Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
+  }
+};
+
+fetchItems();
+
 
 /**
  * Filters the list of pets based on a search query and a selected type filter.
@@ -48,8 +81,9 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { width: "100%", height: "100%" },
   header: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FBF0DC', marginTop: 50, padding: 10},
-  searchBar: { flex: 1, height: 40, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 },
+  searchBar: { flex: 1, height: 40, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10},
   filterButton: { backgroundColor: '#6B431F', padding: 10, borderRadius: 5, margin: 5 },
+  clearButton: {backgroundColor: 'red', padding: 10, borderRadius: 5, margin: 5 },
   filterButtonText: { color: 'white', fontWeight: 'bold' },
   userLocationButton: {
     position: "absolute",
@@ -76,7 +110,7 @@ const styles = StyleSheet.create({
 export default function MapScreen() {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [dataActual, setData] = useState<Pet[]>([]);
+  const [dataActual, setData] = useState<Pet[]>(startData);
   const [userLocation, setUserLocation] = useState< Location.LocationObject  | null>(null);
   const mapRef = useRef<MapView>(null)
   let locationSubscription: Location.LocationSubscription | null = null;
@@ -104,108 +138,41 @@ export default function MapScreen() {
    */
   useEffect(() => {
     const fetchItems = async () => {
-      
+      console.log("Fetching with filter:", selectedFilter, "?? query:", searchQuery);
       try {
-        if(selectedFilter != "" && searchQuery != ""){
-          const { data, error: dbError, status } = await supabase
-          .from('pets') // Your table name
-          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
-          .eq('species',selectedFilter.toLowerCase())
-          .ilike('name', '%'+searchQuery+'%')
-          .order('created_at', {ascending: false})
-          .limit(3);
-
-          if (dbError) {
-            // Throw the error to be caught by the catch block
-            throw dbError;
-          }
-          console.log(data);
+        let query = supabase
+          .from('pets')
+          .select('id, name, species, latitude, longitude, photo_url, description')
+          .order('created_at', { ascending: false })
+          .limit(3); // Maybe increase limit? 3 seems very low.
   
-          if (data) {
-            // Set the fetched data into state
-            setData(data);
-          }
-          return
+        // Apply filters conditionally
+        if (selectedFilter) { // Check if filter is not empty string
+          query = query.eq('species', selectedFilter.toLowerCase());
         }
-        
-        if(selectedFilter == "" && searchQuery == ""){
-
-          const { data, error: dbError, status } = await supabase
-          .from('pets') // Your table name
-          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
-          .order('created_at', {ascending: false})
-          .limit(3);
-
-          if (dbError) {
-            // Throw the error to be caught by the catch block
-            throw dbError;
-          }
-          console.log(data);
-          console.log("Both are empty")
-          if (data) {
-            // Set the fetched data into state
-            setData(data);
-          }
-          return
-
+        if (searchQuery) { // Check if query is not empty string
+          query = query.ilike('name', `%${searchQuery}%`);
         }
-
-        if(selectedFilter != "" && searchQuery == ""){
-          const { data, error: dbError, status } = await supabase
-          .from('pets') // Your table name
-          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
-          .eq('species',selectedFilter.toLowerCase())
-          .order('created_at', {ascending: false})
-          .limit(3);
-
-          if (dbError) {
-            // Throw the error to be caught by the catch block
-            throw dbError;
-          }
-          console.log(data);
   
-          if (data) {
-            // Set the fetched data into state
-            setData(data);
-          }
-          return
-        }
-
-        if(selectedFilter == "" && searchQuery != ""){
-          const { data, error: dbError, status } = await supabase
-          .from('pets') // Your table name
-          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
-          .ilike('name', '%'+searchQuery+'%')
-          .order('created_at', {ascending: false})
-          .limit(3);
-
-          if (dbError) {
-            // Throw the error to be caught by the catch block
-            throw dbError;
-          }
-          console.log(data);
+        const { data, error: dbError } = await query;
   
-          if (data) {
-            // Set the fetched data into state
-            setData(data);
-          }
-          return
+        if (dbError) {
+          throw dbError;
         }
-
-      
-        
-
+  
+        console.log("Fetched Data:", data);
+        setData(data);
+         // Set data or empty array if data is null/undefined
+  
       } catch (err: any) {
         console.error('Error fetching items:', err);
-        
+        setData([]); // Clear data on error
         Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
       }
     };
-    console.log(searchQuery)
-    console.log(selectedFilter)
-
+  
     fetchItems();
-  }, [selectedFilter, searchQuery]);
+  }, [selectedFilter, searchQuery]); // Dependencies are correct
 
   useEffect(() => {
     (async () => {
@@ -242,14 +209,15 @@ export default function MapScreen() {
         <TextInput
           style={styles.searchBar}
           placeholder="Search..."
+          placeholderTextColor = "#919397"
           onChangeText={setSearchQuery}
         />
       </View>
 
       {/* Filter Buttons for Pet Type */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 ,backgroundColor: '#FBF0DC'}}>
-        {['Dog', 'Cat', 'Others'].map(filter => (
-          <TouchableOpacity key={filter} style={styles.filterButton} onPress={() => setSelectedFilter(filter)}>
+        {['Dog', 'Cat', 'Others','Clear'].map(filter => (
+          <TouchableOpacity key={filter} style={filter === "Clear" ? styles.clearButton: styles.filterButton} onPress={() => filter === "Clear" ? setSelectedFilter("") : setSelectedFilter(filter)}>
             <Text style={styles.filterButtonText}>{filter}</Text>
           </TouchableOpacity>
         ))}
