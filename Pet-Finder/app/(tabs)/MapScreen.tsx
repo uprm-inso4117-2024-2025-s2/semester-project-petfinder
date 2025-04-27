@@ -1,10 +1,11 @@
-import { Text, View, Image, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Callout } from 'react-native-maps';
 import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
 import { sortByDistance, sortByName } from "@/utils/sortUtils";
+import { supabase } from '../../utils/supabase';
 
 /**
  * Interface representing a pet object.
@@ -12,12 +13,12 @@ import { sortByDistance, sortByName } from "@/utils/sortUtils";
 interface Pet {
   id: number;
   name: string;
-  type: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-  photo: any;
+  species: string;
+  
+  latitude: number;
+  longitude: number;
+  
+  photo_url: any;
   description: string;
 }
 
@@ -31,14 +32,6 @@ const INITIAL_REGION = {
   longitudeDelta: 0.02421
 };
 
-/**
- * Initial dataset of pets available for display.
- */
-const InitialData: Pet[] = [
-  { id: 1, name: "Henry", type: "Dog", location: { latitude: 18.209533, longitude: -67.140849 }, photo: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big dog" },
-  { id: 2, name: "Jose", type: "Dog", location: { latitude: 18.219533, longitude: -67.140849 }, photo: require("../../assets/images/Pet_Finder_Assets/dog.png"), description: "He's a big Dog" },
-  { id: 3, name: "Lara", type: "Cat", location: { latitude: 18.219633, longitude: -67.141749 }, photo: require("../../assets/images/Pet_Finder_Assets/cat.png"), description: "He's a big cat" },
-];
 
 /**
  * Filters the list of pets based on a search query and a selected type filter.
@@ -47,12 +40,6 @@ const InitialData: Pet[] = [
  * @param selectedFilter - The type of pet filter selected.
  * @returns The filtered list of pets matching the criteria.
  */
-function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
-  return pets.filter(pet =>
-    (selectedFilter === "" || pet.type.includes(selectedFilter)) &&
-    (searchQuery === "" || pet.name.includes(searchQuery))
-  );
-}
 
 /**
  * Styles for various UI components.
@@ -73,7 +60,7 @@ const styles = StyleSheet.create({
 export default function MapScreen() {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [data, setData] = useState<Pet[]>([]);
+  const [dataActual, setData] = useState<Pet[]>([]);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   let locationSubscription: Location.LocationSubscription | null = null;
 
@@ -99,9 +86,108 @@ export default function MapScreen() {
    * Effect hook to filter pets based on search query and selected filter.
    */
   useEffect(() => {
-    const filtered = filterData(InitialData, searchQuery, selectedFilter);
-    const sorted = selectedFilter === "Dog" ? sortByDistance(filtered) : sortByName(filtered);
-    setData(sorted);
+    const fetchItems = async () => {
+      
+      try {
+        if(selectedFilter != "" && searchQuery != ""){
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .eq('species',selectedFilter.toLowerCase())
+          .ilike('name', '%'+searchQuery+'%')
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+        }
+        
+        if(selectedFilter == "" && searchQuery == ""){
+
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+          console.log("Both are empty")
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+
+        }
+
+        if(selectedFilter != "" && searchQuery == ""){
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .eq('species',selectedFilter.toLowerCase())
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+        }
+
+        if(selectedFilter == "" && searchQuery != ""){
+          const { data, error: dbError, status } = await supabase
+          .from('pets') // Your table name
+          .select('id, name, species, latitude, longitude, photo_url, description ') // Specify columns
+          .ilike('name', '%'+searchQuery+'%')
+          .order('created_at', {ascending: false})
+          .limit(3);
+
+          if (dbError) {
+            // Throw the error to be caught by the catch block
+            throw dbError;
+          }
+          console.log(data);
+  
+          if (data) {
+            // Set the fetched data into state
+            setData(data);
+          }
+          return
+        }
+
+      
+        
+
+      } catch (err: any) {
+        console.error('Error fetching items:', err);
+        
+        Alert.alert("Error", `Failed to fetch items: ${err.message || 'Unknown error'}`);
+      }
+    };
+    console.log(searchQuery)
+    console.log(selectedFilter)
+
+    fetchItems();
   }, [selectedFilter, searchQuery]);
 
   return (
@@ -127,11 +213,11 @@ export default function MapScreen() {
 
       {/* Map View with Pet Markers */}
       <MapView initialRegion={INITIAL_REGION} showsUserLocation style={styles.map}>
-        {data.map((pet: Pet) => (
+        {dataActual.map((pet: Pet) => (
           <Marker
             key={pet.id}
-            coordinate={pet.location}
-            image={pet.type === 'Dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+            coordinate={{latitude : pet.latitude ,  longitude: pet.longitude}}
+            image={pet.species === 'dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
           >
             <Callout>
               <Descriptor {...pet} />
