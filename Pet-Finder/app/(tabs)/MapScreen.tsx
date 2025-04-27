@@ -1,7 +1,7 @@
 import { Text, View, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { StyleSheet } from "react-native";
 import MapView, { Marker, Callout } from 'react-native-maps';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
 import { supabase } from '../../utils/supabase';
@@ -46,10 +46,26 @@ const INITIAL_REGION = {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { width: "100%", height: "100%" },
-  header: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FBF0DC', padding: 10 },
+  header: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FBF0DC', marginTop: 50, padding: 10},
   searchBar: { flex: 1, height: 40, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 },
   filterButton: { backgroundColor: '#6B431F', padding: 10, borderRadius: 5, margin: 5 },
   filterButtonText: { color: 'white', fontWeight: 'bold' },
+  userLocationButton: {
+    position: "absolute",
+    bottom: "12%",
+    right: "5%",
+    backgroundColor: "#FBF0DC",
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonImage: {
+    width: 35,
+    height: 35,
+    resizeMode: "contain",
+  }
 });
 
 /**
@@ -60,7 +76,8 @@ export default function MapScreen() {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [dataActual, setData] = useState<Pet[]>([]);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [userLocation, setUserLocation] = useState< Location.LocationObject  | null>(null);
+  const mapRef = useRef<MapView>(null)
   let locationSubscription: Location.LocationSubscription | null = null;
 
   /**
@@ -73,7 +90,7 @@ export default function MapScreen() {
 
       locationSubscription = await Location.watchPositionAsync(
         { accuracy: Location.Accuracy.High, timeInterval: 10000, distanceInterval: 10 },
-        (location) => setUserLocation({ latitude: location.coords.latitude, longitude: location.coords.longitude })
+        (location) => setUserLocation(location)
       );
     };
 
@@ -189,6 +206,33 @@ export default function MapScreen() {
     fetchItems();
   }, [selectedFilter, searchQuery]);
 
+  useEffect(() => {
+    (async () => {
+      let {status} = await Location.requestForegroundPermissionsAsync();
+      if(status != 'granted') {
+        return;
+      }
+      let userLocation = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+        timeInterval: 5,
+      });
+      setUserLocation(userLocation);
+    }) ();
+  }, []);
+
+  const goToCurrentLocation = async () => {
+    if(userLocation && mapRef.current) {
+      mapRef.current.animateCamera({
+        center: {
+          latitude: userLocation.coords.latitude,
+          longitude: userLocation.coords.longitude,
+        },
+        altitude: 2000,
+        zoom: 15,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Header with Logo and Search Bar */}
@@ -202,7 +246,7 @@ export default function MapScreen() {
       </View>
 
       {/* Filter Buttons for Pet Type */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 ,backgroundColor: '#FBF0DC'}}>
         {['Dog', 'Cat', 'Others'].map(filter => (
           <TouchableOpacity key={filter} style={styles.filterButton} onPress={() => setSelectedFilter(filter)}>
             <Text style={styles.filterButtonText}>{filter}</Text>
@@ -211,7 +255,7 @@ export default function MapScreen() {
       </View>
 
       {/* Map View with Pet Markers */}
-      <MapView initialRegion={INITIAL_REGION} showsUserLocation style={styles.map}>
+      <MapView ref={mapRef} initialRegion={INITIAL_REGION} showsUserLocation={true} style={styles.map}>
         {dataActual.map((pet: Pet) => (
           <Marker
             key={pet.id}
@@ -224,6 +268,12 @@ export default function MapScreen() {
           </Marker>
         ))}
       </MapView>
+      <TouchableOpacity style={styles.userLocationButton} onPress={goToCurrentLocation}>
+        <Image 
+        source={require("../../assets/images/Pet_Finder_Assets/Pet_UserLocation.png")}
+        style={styles.buttonImage}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
