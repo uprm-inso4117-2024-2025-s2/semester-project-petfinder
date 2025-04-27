@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import Descriptor from "@/components/descriptor";
 import { sortByDistance, sortByName } from "@/utils/sortUtils";
 import { supabase } from '../../utils/supabase';
-import { sortByDistance, sortByName } from "@/utils/sortUtils";
+
 
 /**
  * Interface representing a pet object.
