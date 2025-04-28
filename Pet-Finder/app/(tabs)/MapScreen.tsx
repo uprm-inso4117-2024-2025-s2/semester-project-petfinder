@@ -75,6 +75,14 @@ fetchItems();
  * @returns The filtered list of pets matching the criteria.
  */
 
+export function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
+  return pets.filter(pet =>
+    (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
+    (searchQuery === "" || pet.name.includes(searchQuery))
+  );
+}
+
+
 /**
  * Styles for various UI components.
  */
@@ -229,8 +237,10 @@ export default function MapScreen() {
         {dataActual.map((pet: Pet) => (
           <Marker
             key={pet.id}
+
             coordinate={{latitude : pet.latitude ,  longitude: pet.longitude}}
             image={pet.species === 'dog' ? require("../../assets/images/Pet_Finder_Assets/Pet_DogMarker.png") : require("../../assets/images/Pet_Finder_Assets/Pet_CatMarker.png")}
+
           >
             <Callout>
               <Descriptor {...pet} />
