@@ -1,6 +1,7 @@
 import React from "react"; 
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { Linking } from "react-native";
 
 export default function LandingPage() {
     const router = useRouter();
@@ -50,10 +51,18 @@ export default function LandingPage() {
                 {/* Footer inside ScrollView */}
                 <View style={styles.footer}>
                     <View style={styles.footerLinks}>
-                        <Text style={styles.footerLink}>Contact Us</Text>
-                        <Text style={styles.footerLink}>Success Stories</Text>
-                        <Text style={styles.footerLink}>Resources</Text>
-                        <Text style={styles.footerLink}>Privacy Policy</Text>
+                        <TouchableOpacity onPress={() => Linking.openURL("https://drive.google.com/file/d/18bOKIcIvZCcyYcwF8iy6POVRgIo_G4HI/view?usp=sharing")}>
+                            <Text style={styles.footerLink}>Contact Us</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => Linking.openURL("https://drive.google.com/file/d/1mH6dYYX_B6VP9EqeZYgPi8I5mV8Anlos/view?usp=sharing")}>
+                            <Text style={styles.footerLink}>FAQ</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => Linking.openURL("https://drive.google.com/file/d/1Ln46Y94smCt7_cVET5Ey2R-ztHJHoz-I/view?usp=sharing")}>
+                            <Text style={styles.footerLink}>Resources</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => Linking.openURL("https://drive.google.com/file/d/1szejtG6M6bdgzeFZpLOn3TOuaFo-EklF/view?usp=sharing")}>
+                            <Text style={styles.footerLink}>Privacy Policy</Text>
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.footerText}>© 2025 Pet Finder. All rights reserved.</Text>
                     <Text style={styles.footerText}>Made with ❤️ by Team Pet Finder</Text>
