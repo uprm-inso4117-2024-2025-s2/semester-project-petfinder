@@ -9,10 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "lint": "expo lint",
+    "test:fuzz": "jest test/fuzz.js --config=jest.config.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
@@ -20,9 +18,7 @@
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
-
     "@supabase/supabase-js": "^2.49.4",
-
     "@testing-library/react-native": "^13.2.0",
     "bcrypt": "^5.1.1",
     "expo": "~52.0.35",
@@ -62,6 +58,7 @@
     "@react-native-community/cli": "latest",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/jest-runner": "^8.7.1",
+    "@testing-library/jest-native": "^5.4.3",
     "@types/jest": "^29.5.14",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.72.8",
