@@ -1,3 +1,18 @@
+jest.mock('react-native-modal-datetime-picker', () => {
+  const React = require('react');
+  const { Button } = require('react-native');
+  return ({ isVisible, onConfirm, onCancel, testID }: any) => {
+    if (!isVisible) return null;
+    return (
+      <Button
+        testID={testID}
+        title="Confirm"
+        onPress={() => onConfirm(new Date('2025-04-29T12:00:00Z'))}
+      />
+    );
+  };
+});
+
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -270,12 +285,13 @@ export default function ReportPetScreen() {
               <Text style={styles.infoIcon}> ⓘ</Text>
             </TouchableOpacity>
           </Text>
-          <TouchableOpacity style={styles.dateButton} onPress={showDatePicker}>
+          <TouchableOpacity testID="buttonPickDateTime" style={styles.dateButton} onPress={showDatePicker}>
             <Text style={styles.dateButtonText}>
               {dateTime ? dateTime : "Pick Date and Time"}
             </Text>
           </TouchableOpacity>
           <DateTimePickerModal
+            testID="datePicker"
             isVisible={isDatePickerVisible}
             mode="datetime"
             onConfirm={handleConfirm}
@@ -304,10 +320,11 @@ export default function ReportPetScreen() {
           {photoUri && (
             <>
               <Image
+                testID="previewPhoto"
                 source={{ uri: photoUri }}
                 style={{ width: 200, height: 200, marginTop: 10 }}
               />
-              <TouchableOpacity style={styles.removePhotoButton} onPress={handleRemovePhoto}>
+              <TouchableOpacity testID="buttonRemovePhoto" style={styles.removePhotoButton} onPress={handleRemovePhoto}>
                 <Text style={styles.removePhotoButtonText}>Remove Photo</Text>
               </TouchableOpacity>
             </>
@@ -334,6 +351,7 @@ export default function ReportPetScreen() {
           <TextInput
             style={[styles.boxInput, { height: 80 }]}
             placeholder="Enter description"
+            testID="inputDescription"
             placeholderTextColor="#A9A9AC"
             value={description}
             onChangeText={setDescription}
@@ -442,7 +460,7 @@ export default function ReportPetScreen() {
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <TouchableOpacity testID="buttonSubmitReport" style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
 
