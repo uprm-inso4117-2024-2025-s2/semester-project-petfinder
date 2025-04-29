@@ -15,15 +15,15 @@ jest.mock("react-native-maps", () => {
   const { View } = require("react-native");
   return {
     __esModule: true,
-    default: (props: any) => <View {...props} />,
-    Marker: (props: any) => <View {...props} />,
-    Callout: (props: any) => <View {...props} />,
+    default: (props) => <View {...props} />,
+    Marker: (props) => <View {...props} />,
+    Callout: (props) => <View {...props} />,
   };
 });
 
 jest.mock("@/components/descriptor", () => ({
   __esModule: true,
-  default: (props: any) => <></>,
+  default: (props) => <></>,
 }));
 
 describe('MapScreen Performance', () => {
