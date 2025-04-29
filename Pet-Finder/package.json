@@ -13,7 +13,9 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFiles": ["./jest-setup.js"]
+    "setupFiles": [
+      "./jest-setup.js"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
