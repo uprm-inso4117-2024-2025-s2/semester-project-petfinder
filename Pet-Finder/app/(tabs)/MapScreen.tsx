@@ -68,22 +68,6 @@ fetchItems();
 
 
 /**
- * Filters the list of pets based on a search query and a selected type filter.
- * @param pets - The list of available pets.
- * @param searchQuery - The search term entered by the user.
- * @param selectedFilter - The type of pet filter selected.
- * @returns The filtered list of pets matching the criteria.
- */
-
-export function filterData(pets: Pet[], searchQuery: string, selectedFilter: string): Pet[] {
-  return pets.filter(pet =>
-    (selectedFilter === "" || pet.species.includes(selectedFilter)) &&
-    (searchQuery === "" || pet.name.includes(searchQuery))
-  );
-}
-
-
-/**
  * Styles for various UI components.
  */
 const styles = StyleSheet.create({
@@ -248,7 +232,7 @@ export default function MapScreen() {
           </Marker>
         ))}
       </MapView>
-      <TouchableOpacity style={styles.userLocationButton} onPress={goToCurrentLocation}>
+      <TouchableOpacity testID="userLocationButton" style={styles.userLocationButton} onPress={goToCurrentLocation}>
         <Image 
         source={require("../../assets/images/Pet_Finder_Assets/Pet_UserLocation.png")}
         style={styles.buttonImage}
