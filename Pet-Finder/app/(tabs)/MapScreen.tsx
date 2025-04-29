@@ -52,7 +52,7 @@ const fetchItems = async () => {
       throw dbError;
     }
 
-    console.log("Fetched Data:", data);
+    // console.log("Fetched Data:", data);
     startData = data;
 
     return 
@@ -153,7 +153,7 @@ export default function MapScreen() {
           throw dbError;
         }
   
-        console.log("Fetched Data:", data);
+        // console.log("Fetched Data:", data);
         setData(data);
          // Set data or empty array if data is null/undefined
   
