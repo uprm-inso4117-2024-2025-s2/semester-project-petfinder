@@ -5,5 +5,5 @@
   "jest": {
     "projectType": "custom"
   },
-  "mutate": ["filterData.js"]
+  "mutate": ["app/(tabs)/*.tsx"]
 }
