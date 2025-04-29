@@ -5,5 +5,5 @@
   "jest": {
     "projectType": "custom"
   },
-  "mutate": ["app/(tabs)/*.tsx"]
+  "mutate": ["app/(tabs)/*.tsx","utils/sortUtils.ts"]
 }
