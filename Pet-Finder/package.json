@@ -58,6 +58,7 @@
     "@react-native-community/cli": "latest",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/jest-runner": "^8.7.1",
+    "@stryker-mutator/typescript": "^4.0.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.72.8",

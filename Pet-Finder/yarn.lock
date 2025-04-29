@@ -2340,6 +2340,11 @@
     semver "~7.6.3"
     tslib "~2.7.0"
 
+"@stryker-mutator/typescript@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@stryker-mutator/typescript/-/typescript-4.0.0.tgz#55fdb91850a05916daa35361993194046c774631"
+  integrity sha512-dTm8lyDP5HPSOd14ErXXAn6wY6QZMS6UbXPmexesZJeevNZUxRCHZqoTIJIY1a6WBbI2tKJzKuVjXih83jAXBQ==
+
 "@stryker-mutator/util@8.7.1":
   version "8.7.1"
   resolved "https://registry.yarnpkg.com/@stryker-mutator/util/-/util-8.7.1.tgz#1b6215f4238563f0d6f7ba3b70629f68439ea0f1"
