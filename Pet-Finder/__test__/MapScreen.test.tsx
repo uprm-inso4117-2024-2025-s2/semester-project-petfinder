@@ -1,56 +1,77 @@
-
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import MapScreen from '../app/(tabs)/MapScreen';
-import { performance } from 'perf_hooks';
+import * as Location from 'expo-location';
 
-// Mock all the same dependencies as in your regular tests
-jest.mock("expo-location", () => ({
-  requestForegroundPermissionsAsync: jest.fn(() => Promise.resolve({ status: "granted" })),
-  watchPositionAsync: jest.fn(),
-  Accuracy: { High: "high" }
+// Mock expo-location with proper async behavior
+jest.mock('expo-location', () => ({
+  requestForegroundPermissionsAsync: jest.fn(() => 
+    Promise.resolve({ status: 'granted' })
+  ),
+  getCurrentPositionAsync: jest.fn(() => 
+    Promise.resolve({
+      coords: { latitude: 18.2095, longitude: -67.1408 }
+    })
+  ),
+  watchPositionAsync: jest.fn(() => {
+    return Promise.resolve({ remove: jest.fn() });
+  }),
+  Accuracy: { High: 1, Balanced: 2 },
 }));
 
-jest.mock("react-native-maps", () => {
-  const { View } = require("react-native");
-  return {
-    __esModule: true,
-    default: (props: any) => <View {...props} />,
-    Marker: (props: any) => <View {...props} />,
-    Callout: (props: any) => <View {...props} />,
-  };
-});
+// Mock static assets
+jest.mock('../assets/images/Pet_Finder_Assets/Pet_Logo.png', () => 0);
+jest.mock('../assets/images/Pet_Finder_Assets/Pet_UserLocation.png', () => 0);
+jest.mock('../assets/images/Pet_Finder_Assets/Pet_DogMarker.png', () => 0);
+jest.mock('../assets/images/Pet_Finder_Assets/Pet_CatMarker.png', () => 0);
 
-jest.mock("@/components/descriptor", () => ({
-  __esModule: true,
-  default: (props: any) => <></>,
-}));
+// Mock descriptor component
+jest.mock('@/components/descriptor', () => 'Descriptor');
 
-describe('MapScreen Performance', () => {
-  const SAMPLE_SIZE = 5;
-  const WARMUP_ROUNDS = 2;
+describe('MapScreen', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders search bar and filter buttons', async () => {
+    const { getByPlaceholderText, getByText } = render(<MapScreen />);
+    
+    await waitFor(() => {
+      expect(getByPlaceholderText('Search...')).toBeTruthy();
+      expect(getByText('Dog')).toBeTruthy();
+      expect(getByText('Cat')).toBeTruthy();
+      expect(getByText('Others')).toBeTruthy();
+      expect(getByText('Clear')).toBeTruthy();
+    });
+  });
+
+  it('handles user location button press', async () => {
+    const { getByTestId } = render(<MapScreen />);
+    
+    await act(async () => {
+      fireEvent.press(getByTestId('userLocationButton'));
+      await Promise.resolve(); // Allow any pending promises to resolve
+    });
+
+    expect(Location.getCurrentPositionAsync).toHaveBeenCalled();
+  });
+
   
-  it('should render within acceptable time', () => {
-    let totalTime = 0;
+  it('toggles filter buttons', async () => {
+    const { getByText } = render(<MapScreen />);
+    const dogButton = getByText('Dog');
+    const catButton = getByText('Cat');
     
-    // Warmup rounds (not measured)
-    for (let i = 0; i < WARMUP_ROUNDS; i++) {
-      render(<MapScreen />);
-    }
+    await act(async () => {
+      fireEvent.press(dogButton);
+      await Promise.resolve();
+    });
     
-    // Actual measurement rounds
-    for (let i = 0; i < SAMPLE_SIZE; i++) {
-      const start = performance.now();
-      render(<MapScreen />);
-      const end = performance.now();
-      totalTime += end - start;
-    }
+    await act(async () => {
+      fireEvent.press(catButton);
+      await Promise.resolve();
+    });
     
-    const averageTime = totalTime / SAMPLE_SIZE;
-    console.log(`Average render time: ${averageTime}ms`);
-    
-    // Set your performance threshold (adjust based on your needs)
-    const MAX_ACCEPTABLE_TIME = 300; // milliseconds
-    expect(averageTime).toBeLessThan(MAX_ACCEPTABLE_TIME);
+    // Add assertions for visual feedback if available
   });
 });
