@@ -10,15 +10,13 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
-
-// Import the placeholder image
-import ProfileImagePlaceholder from "../../assets/images/profileImageplaceholder.jpeg"; // Adjust the path as needed
+import ProfileImagePlaceholder from "../../assets/images/profileImageplaceholder.jpeg";
 
 export default function ProfileScreen() {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(null); // No image initially
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const [user, setUser] = useState({
     name: "Student Name",
@@ -32,10 +30,8 @@ export default function ProfileScreen() {
     setUser({ ...user, [field]: value });
   };
 
-  // Function to pick an image from the gallery
   const pickImage = async () => {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission to access gallery is required!");
       return;
@@ -55,13 +51,12 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
+          <Ionicons name="arrow-back" size={24} color="#6b431f" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Ionicons name="settings-outline" size={24} color="black" />
+          <Ionicons name="settings-outline" size={24} color="#6b431f" />
         </TouchableOpacity>
       </View>
 
@@ -75,7 +70,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* User Name */}
       <TextInput
         style={[styles.name, isEditing && styles.editable]}
         value={user.name}
@@ -83,7 +77,6 @@ export default function ProfileScreen() {
         editable={isEditing}
       />
 
-      {/* Editable Fields */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -107,7 +100,7 @@ export default function ProfileScreen() {
           <Ionicons
             name="calendar-outline"
             size={20}
-            color={isEditing ? "black" : "gray"}
+            color={isEditing ? "#6b431f" : "gray"}
           />
         </View>
       </View>
@@ -139,13 +132,12 @@ export default function ProfileScreen() {
             <Ionicons
               name={passwordVisible ? "eye-off-outline" : "eye-outline"}
               size={20}
-              color={isEditing ? "black" : "gray"}
+              color={isEditing ? "#6b431f" : "gray"}
             />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Save Button */}
       {isEditing && (
         <TouchableOpacity
           style={styles.saveButton}
@@ -155,7 +147,6 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       )}
 
-      {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
@@ -166,7 +157,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#faf0dc",
     paddingHorizontal: 25,
     paddingTop: 70,
   },
@@ -177,26 +168,29 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 80,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: "#c2b59b",
   },
   editIcon: {
     position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: "#16A849",
+    bottom: 15,
+    right: 15,
+    backgroundColor: "#6b431f",
     borderRadius: 20,
     padding: 6,
-    elevation: 3, // Adds slight shadow
+    elevation: 3,
   },
   name: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
+    color: "#6b431f",
     marginBottom: 20,
   },
   inputContainer: {
@@ -204,24 +198,24 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "gray",
+    color: "#6b431f",
     marginBottom: 5,
   },
   input: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderColor: "#c2b59b",
   },
   inputWithIcon: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderColor: "#c2b59b",
     justifyContent: "space-between",
   },
   inputField: {
@@ -229,13 +223,13 @@ const styles = StyleSheet.create({
   },
   editable: {
     borderWidth: 2,
-    borderColor: "#16A849",
-    backgroundColor: "#F8F8F8",
+    borderColor: "#6b431f",
+    backgroundColor: "#f9f5ef",
     paddingHorizontal: 5,
   },
   saveButton: {
     marginTop: 20,
-    backgroundColor: "blue",
+    backgroundColor: "#6b431f",
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -248,13 +242,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: "white",
     borderWidth: 1,
-    borderColor: "red",
+    borderColor: "#6b431f", 
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
   },
   logoutText: {
-    color: "red",
+    color: "#6b431f", 
     fontWeight: "bold",
   },
 });
