@@ -3,6 +3,76 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
     "dotenv": "^16.4.7",
-    "expo-image-picker": "^16.0.6"
-  }
+    "expo": "~52.0.35",
+    "expo-auth-session": "~6.0.3",
+    "expo-blur": "~14.0.3",
+    "expo-constants": "~17.0.6",
+    "expo-crypto": "~14.0.2",
+    "expo-font": "~13.0.3",
+    "expo-haptics": "~14.0.1",
+    "expo-image-picker": "~16.0.6",
+    "expo-linking": "~7.0.5",
+    "expo-location": "^18.0.7",
+    "expo-router": "~4.0.17",
+    "expo-splash-screen": "~0.29.22",
+    "expo-status-bar": "~2.0.1",
+    "expo-symbols": "~0.2.2",
+    "expo-system-ui": "~4.0.8",
+    "expo-web-browser": "~14.0.2",
+    "install": "^0.13.0",
+    "metro": "^0.81.1",
+    "metro-config": "^0.81.1",
+    "metro-core": "^0.81.1",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "mime": "^4.0.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.7",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-maps": "^1.20.1",
+    "react-native-modal-datetime-picker": "^18.0.0",
+    "react-native-polyfill-globals": "^3.1.0",
+    "react-native-qrcode-svg": "^6.3.14",
+    "react-native-reanimated": "~3.16.1",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-web": "~0.19.13",
+    "react-native-web-maps": "^0.3.0",
+    "react-native-webview": "13.12.5",
+    "text-encoding": "^0.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@cucumber/cucumber": "^11.2.0",
+    "@react-native-community/cli": "latest",
+    "@stryker-mutator/core": "^8.7.1",
+    "@stryker-mutator/jest-runner": "^8.7.1",
+    "@types/jest": "^29.5.12",
+    "@types/mime": "^3.0.4",
+    "@types/react": "~18.3.12",
+    "@types/react-native": "^0.72.8",
+    "@types/react-test-renderer": "^18.3.0",
+    "expo-image-picker": "^16.0.6",
+    "jest": "^29.2.1",
+    "jest-expo": "~52.0.4",
+    "react-test-renderer": "18.3.1",
+    "supertest": "^7.0.0",
+    "typescript": "^5.3.3"
+  },
+  "description": "PetFinder is a mobile app specifically designed as a tool to assist pet owners in the case of their pets being lost. \r The main purpose of the application is to send an alert to every user within a requested radius of a lost pet, and \r to notify any user getting close to a reported area, along with providing all the required information to \r communicate with the owner in case of the pet being found.",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder/issues"
+  },
+  "homepage": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder#readme"
 }
