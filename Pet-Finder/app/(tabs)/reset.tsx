@@ -4,11 +4,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
+  StyleSheet,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase"; // NOTE: Adjusted for correct relative path
+import { supabase } from "../../lib/supabase"; // adjust as needed
 
 export default function ResetPasswordScreen() {
   const [email, setEmail] = useState("");
@@ -17,87 +20,109 @@ export default function ResetPasswordScreen() {
 
   const handlePasswordReset = async () => {
     if (!email.trim()) {
-      Alert.alert("Error", "Please enter a valid email address.");
+      alert("Please enter a valid email.");
       return;
     }
 
     setLoading(true);
-
     const { error } = await supabase.auth.resetPasswordForEmail(email);
-
     setLoading(false);
 
     if (error) {
-      Alert.alert("Reset Failed", error.message);
+      alert(error.message);
     } else {
-      Alert.alert(
-        "Success",
-        "Password reset link sent! Please check your inbox."
-      );
-      router.replace("/"); // ✅ Adjust if your login is under a different route
+      alert("Password reset link sent. Check your email.");
+      router.replace("/LoginScreen");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Reset Password</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={styles.container}
+    >
+      <View style={styles.inner}>
+        <Image
+          source={require("@/assets/images/pet_finder_logo_middle.jpeg")}
+          style={styles.logo}
+        />
+        <Text style={styles.title}>Reset Password</Text>
+        <Text style={styles.subtitle}>Enter your email to receive a reset link</Text>
 
-      <TextInput
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        style={styles.input}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="you@example.com"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+          placeholderTextColor="#9e896b"
+        />
 
-      <TouchableOpacity
-        onPress={handlePasswordReset}
-        style={styles.button}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Send Reset Link</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handlePasswordReset}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Send Reset Link</Text>
+          )}
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.back()} style={styles.backLink}>
-        <Text style={styles.backText}>← Back to Login</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.back}>← Back to Login</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#faf0dc",
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
-    backgroundColor: "#f8f9fa",
   },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
+  inner: {
+    width: "90%",
+    alignItems: "center",
+  },
+  logo: {
+    width: 160,
+    height: 160,
+    marginBottom: 20,
+    resizeMode: "contain",
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "700",
+    marginBottom: 8,
+    color: "#6b431f",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#6b431f",
     marginBottom: 24,
-    color: "#333",
+    textAlign: "center",
   },
   input: {
     width: "100%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 12,
-    borderRadius: 8,
     backgroundColor: "#fff",
-    marginBottom: 20,
+    borderColor: "#c8b49b",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 14,
     fontSize: 16,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: "#3498db",
+    backgroundColor: "#6b431f",
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 10,
     width: "100%",
     alignItems: "center",
   },
@@ -106,12 +131,10 @@ const styles = {
     fontWeight: "600",
     fontSize: 16,
   },
-  backLink: {
-    marginTop: 20,
-  },
-  backText: {
-    color: "#3498db",
+  back: {
+    marginTop: 18,
+    color: "#6b431f",
     fontSize: 14,
     textDecorationLine: "underline",
   },
-};
+});
