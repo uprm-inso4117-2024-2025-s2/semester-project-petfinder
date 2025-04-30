@@ -1,7 +1,32 @@
 {
+  "name": "pet-finder",
+  "main": "expo-router/entry",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "reset-project": "node ./scripts/reset-project.js",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test": "jest --watchAll",
+    "lint": "expo lint"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
   "type": "module",
   "dependencies": {
-    "@supabase/supabase-js": "^2.48.1",
+    "@expo/cli": "^0.22.17",
+    "@expo/vector-icons": "^14.0.2",
+    "@react-native-async-storage/async-storage": "^2.1.1",
+    "@react-native-community/datetimepicker": "8.2.0",
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "@supabase/supabase-js": "^2.49.1",
+    "@testing-library/react-native": "^13.2.0",
+    "base-64": "^1.0.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
     "expo": "~52.0.35",
     "expo-auth-session": "~6.0.3",
@@ -44,7 +69,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@cucumber/cucumber": "^11.2.0",
     "@react-native-community/cli": "latest",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/jest-runner": "^8.7.1",
@@ -59,20 +83,5 @@
     "react-test-renderer": "18.3.1",
     "supertest": "^7.0.0",
     "typescript": "^5.3.3"
-  },
-  "description": "PetFinder is a mobile app specifically designed as a tool to assist pet owners in the case of their pets being lost. \r The main purpose of the application is to send an alert to every user within a requested radius of a lost pet, and \r to notify any user getting close to a reported area, along with providing all the required information to \r communicate with the owner in case of the pet being found.",
-  "directories": {
-    "test": "tests"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder/issues"
-  },
-  "homepage": "https://github.com/uprm-inso4117-2024-2025-s2/semester-project-semester-project-petfinder#readme"
+  }
 }

@@ -14,6 +14,8 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    red: '#FF6347',   // Tomato red for lost pets
+    green: '#32CD32', // Lime green for found pets
   },
   dark: {
     text: '#ECEDEE',
