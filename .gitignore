@@ -1,7 +1,3 @@
 node_modules/
-.expo/
-.expo-shared/
-build/
-dist/
-*.log
-.env
+node_modulesS
+node_modules
